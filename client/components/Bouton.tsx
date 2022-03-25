@@ -2,14 +2,13 @@ import * as WebBrowser from 'expo-web-browser';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import Colors from '../constants/Colors';
-import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
 
-export default function Bouton({ text }: { text: string }) {
+export default function Bouton({ text, test }: { text: string; test: () => void }) {
     return (
         <View>
             <TouchableOpacity>
-                <Text style={styles.button}>{text}</Text>
+                <Text onPress={test} style={styles.button}>{text}</Text>
             </TouchableOpacity>
 
         </View>
