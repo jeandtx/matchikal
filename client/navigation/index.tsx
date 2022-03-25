@@ -3,7 +3,7 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -20,10 +20,23 @@ import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../typ
 import LinkingConfiguration from './LinkingConfiguration';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+  const MyTheme = {
+    dark: false,
+  colors: {
+    primary: Colors.dark_violet,
+    background: Colors.dark_violet,
+    card: Colors.dark_violet,
+    text: Colors.dark_violet,
+    border: Colors.dark_violet,
+    notification: Colors.dark_violet,
+  },
+  };
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      // theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+      theme={MyTheme}
+      >
       <RootNavigator />
     </NavigationContainer>
   );
@@ -39,7 +52,7 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      {/* <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} /> */}
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
@@ -61,22 +74,22 @@ function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="Accueil"
       screenOptions={{
-        tabBarActiveTintColor: Colors.dark_blue,
+        tabBarActiveTintColor: 'Colors.dark_blue', // Color of highlighted icon in the bottom tab bar
       }}>
       <BottomTab.Screen
         name="Accueil"
         component={TabOneScreen}
         options={({ navigation }: RootTabScreenProps<'Accueil'>) => ({
-          title: 'Accueil',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Accueil', // This is the string displayed on left of the bar
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={colorScheme} />,
           headerRight: () => (
             <Pressable
               onPress={() => navigation.navigate('Modal')}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}>
-              <FontAwesome
-                name="info-circle"
+              <AntDesign
+                name="login"
                 size={25}
                 color={Colors.dark_blue}
                 style={{ marginRight: 15 }}
