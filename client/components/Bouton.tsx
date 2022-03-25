@@ -6,8 +6,8 @@ import { Text, View } from './Themed';
 
 export default function Bouton({ text, test }: { text: string; test: () => void }) {
     return (
-        <View>
-            <TouchableOpacity>
+        <View style={styles.container}>
+            <TouchableOpacity style={styles.button}>
                 <Text onPress={test} style={styles.button}>{text}</Text>
             </TouchableOpacity>
 
@@ -22,37 +22,22 @@ function handleHelpPress() {
 }
 
 const styles = StyleSheet.create({
-    getStartedContainer: {
-        alignItems: 'center',
-        marginHorizontal: 50,
+    container:{
+        backgroundColor :Colors.dark_violet
+
     },
+    
     button: {
-        backgroundColor: Colors.light.text,
+        backgroundColor: Colors.dark_blue,
         color: Colors.dark.text,
         borderRadius: 80,
-        padding: 10,
+        padding: 5,
+        paddingHorizontal: 40,
+        fontSize: 20,
+        marginVertical: 20,
+        
+        
+        
     },
-    homeScreenFilename: {
-        marginVertical: 7,
-    },
-    codeHighlightContainer: {
-        borderRadius: 3,
-        paddingHorizontal: 4,
-    },
-    getStartedText: {
-        fontSize: 17,
-        lineHeight: 24,
-        textAlign: 'center',
-    },
-    helpContainer: {
-        marginTop: 15,
-        marginHorizontal: 20,
-        alignItems: 'center',
-    },
-    helpLink: {
-        paddingVertical: 15,
-    },
-    helpLinkText: {
-        textAlign: 'center',
-    },
+    
 });

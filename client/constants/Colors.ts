@@ -15,5 +15,15 @@ export default {
     tint: tintColorDark,
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorDark,
-  }
+  },
+  dark_violet:'#10002B',
+    
+  violet : "#5A189A",
+
+  
+  light_pink : "#E0AAFF",
+  
+  dark_blue : "#2d00f7"
+
+  
 };
