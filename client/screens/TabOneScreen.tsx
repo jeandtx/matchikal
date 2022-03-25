@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark_violet,
   },
   title: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: 'bold',
     color: Colors.violet,
 

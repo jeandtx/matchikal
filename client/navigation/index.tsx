@@ -44,6 +44,7 @@ function RootNavigator() {
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
     </Stack.Navigator>
+
   );
 }
 
@@ -60,7 +61,7 @@ function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="Accueil"
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
+        tabBarActiveTintColor: Colors.dark_blue,
       }}>
       <BottomTab.Screen
         name="Accueil"
@@ -77,7 +78,7 @@ function BottomTabNavigator() {
               <FontAwesome
                 name="info-circle"
                 size={25}
-                color={Colors[colorScheme].text}
+                color={Colors.dark_blue}
                 style={{ marginRight: 15 }}
               />
             </Pressable>
