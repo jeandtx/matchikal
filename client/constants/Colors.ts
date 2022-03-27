@@ -23,7 +23,9 @@ export default {
   
   light_pink : "#E0AAFF",
   
-  dark_blue : "#2d00f7"
+  dark_blue : "#2d00f7",
+
+  bleu_marine : "#0a0345",
 
   
 };

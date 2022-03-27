@@ -3,16 +3,16 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome, AntDesign } from '@expo/vector-icons';
+import { FontAwesome, AntDesign, Entypo } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import ModalScreen from '../screens/ModalScreen';
+import LoginScreen from '../screens/LoginScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
@@ -23,29 +23,29 @@ import LinkingConfiguration from './LinkingConfiguration';
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   const MyTheme = {
     dark: false,
-  colors: {
-    primary: Colors.dark_violet,
-    background: Colors.dark_violet,
-    card: Colors.dark_violet,
-    text: Colors.light_pink,
-    border: Colors.light_pink,
-    notification: Colors.light_pink,
-  },
+    colors: {
+      primary: Colors.bleu_marine,
+      background: Colors.bleu_marine,
+      card: Colors.bleu_marine,
+      text: Colors.dark.text,
+      border: Colors.bleu_marine,
+      notification: Colors.light_pink,
+    },
   };
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
       // theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
       theme={MyTheme}
-      >
+    >
       <RootNavigator />
     </NavigationContainer>
   );
 }
 
 /**
- * A root stack navigator is often used for displaying modals on top of all other content.
- * https://reactnavigation.org/docs/modal
+ * A root stack navigator is often used for displaying Logins on top of all other content.
+ * https://reactnavigation.org/docs/Login
  */
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -55,7 +55,7 @@ function RootNavigator() {
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
       </Stack.Group>
     </Stack.Navigator>
 
@@ -82,17 +82,17 @@ function BottomTabNavigator() {
         component={TabOneScreen}
         options={({ navigation }: RootTabScreenProps<'Accueil'>) => ({
           title: 'Accueil', // This is the string displayed on left of the bar
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <Entypo name="home" size={24} color={color} />,
           headerRight: () => (
             <Pressable
-              onPress={() => navigation.navigate('Modal')}
+              onPress={() => navigation.navigate('Login')}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}>
               <AntDesign
                 name="login"
                 size={25}
-                color={Colors.dark_blue}
+                color={Colors.dark.text}
                 style={{ marginRight: 15 }}
               />
             </Pressable>

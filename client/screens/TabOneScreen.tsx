@@ -4,12 +4,11 @@ import Bouton from '../components/Bouton';
 import { Text, View } from '../components/Themed';
 import Colors from '../constants/Colors';
 import { RootTabScreenProps } from '../types';
-import { SafeAreaView } from 'react-native';
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'Accueil'>) {
   return (
     
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
 
       <Text style={styles.title}>MATCHIKAL</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
@@ -20,7 +19,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'Accueil
       <Bouton text="Create a Matchikal" test={() => console.log("Clicked on the Button")} />
         <Bouton text="Matchikal a Friend" test={() => console.log("Clicked on the Button")} />
       
-    </SafeAreaView>
+    </View>
     
   );
 }
@@ -42,7 +41,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 25,
     fontWeight: 'bold',
-    color: Colors.violet,
+    color: Colors.dark.text,
 
   },
   separator: {
