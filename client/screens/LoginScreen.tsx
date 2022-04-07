@@ -9,43 +9,30 @@ import { Text, View } from '../components/Themed';
 
 export default function Screen() {
 
-	const [Id, setText] = React.useState('');
-	const [Password, setTittle] = React.useState('');
-
-
-
+	const [email, setEmail] = React.useState('');
+	const [password, setPassword] = React.useState('');
 
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>Login</Text>
 			<TextInput
-				style={{
-					height: 30,
-					width: '75%',
-					borderColor: 'gray',
-					borderWidth: 1,
-					color: 'white',
-					fontSize: 20
-				}}
-				onChangeText={(input) => setText(input)}
+				style={styles.input}
+
+				returnKeyType="next"
+
+				onChangeText={(input) => setEmail(input)}
 				placeholder="Id"
-				value={Id}
+				value={email}
 			/>
 			<TextInput
-				style={{
-					height: 30,
-					width: '75%',
-					borderColor: 'gray',
-					borderWidth: 1,
-					color: 'white',
-					fontSize: 20
-				}}
-				onChangeText={(input) => setTittle(input)}
+				style={styles.input}
+				onChangeText={(input) => setPassword(input)}
 				placeholder="Password"
-				value={Password}
+				value={password}
+				secureTextEntry
 			/>
 			<a href='MdpOublie'>
-				<Text style={styles.textright}>Mot de passe oublié</Text>
+				<Text style={styles.textright}>Mot de passe oubliÃ©</Text>
 
 			</a>
 			<View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
@@ -68,6 +55,18 @@ export default function Screen() {
 }
 
 const styles = StyleSheet.create({
+	input: {
+		height: 50,
+		borderRadius: 50,
+		// textindent: 10,
+
+		width: '75%',
+		borderColor: 'white',
+		borderWidth: 1,
+		color: 'white',
+		text: 'center',
+		fontSize: 20,
+	},
 	container: {
 		flex: 1,
 		alignItems: 'center',
@@ -96,9 +95,5 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between",
 		flexDirection: 'row',
 		backgroundColor: Colors.dark_violet,
-
-
-
-
 	},
 });

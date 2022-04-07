@@ -16,16 +16,24 @@ export default {
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorDark,
   },
-  dark_violet:'#10002B',
-    
-  violet : "#5A189A",
+  theme: {
+    text: '#fff',
+    background: '#000',
+    tint: tintColorDark,
+    tabIconDefault: '#ccc',
+    tabIconSelected: tintColorDark,
 
-  
-  light_pink : "#E0AAFF",
-  
-  dark_blue : "#2d00f7",
+  },
+  dark_violet: '#10002B',
 
-  bleu_marine : "#0a0345",
+  violet: "#5A189A",
 
-  
+
+  light_pink: "#E0AAFF",
+
+  dark_blue: "#2d00f7",
+
+  bleu_marine: "#0a0345",
+
+
 };
