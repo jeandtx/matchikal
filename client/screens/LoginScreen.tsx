@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
 	input: {
 		height: 50,
 		borderRadius: 50,
-		// textindent: 10,
+		paddingLeft: 20,
 
 		width: '75%',
 		borderColor: 'white',
