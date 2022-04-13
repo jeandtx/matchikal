@@ -2,34 +2,66 @@ import { StatusBar } from 'expo-status-bar';
 import { Platform, StyleSheet, TextInput } from 'react-native';
 import Colors from '../constants/Colors';
 import { Entypo } from '@expo/vector-icons';
-import React from 'react';
+import Bouton from '../components/Bouton';
+import React, { useEffect } from 'react';
 
 
 import { Text, View } from '../components/Themed';
 
 export default function Screen() {
 
-	const [email, setEmail] = React.useState('');
-	const [password, setPassword] = React.useState('');
+	const AUTHORIZE = "https://accounts.spotify.com/authorize";
+
+	const [clientId, setText] = React.useState('');
+	const [clientSecret, setTittle] = React.useState('');
+	var redirect_uri = "http://localhost:19006"; //change to your host link
+
+	const [authExec, setAuthExec] = React.useState(0);
+
+	function requestAuthorization() {
+		var client_id = clientId;
+		var client_secret = clientSecret;
+		localStorage.setItem("client_id", client_id);
+		localStorage.setItem("client_secret", client_secret);
+
+		let url = AUTHORIZE;
+		url += "?client_id=" + client_id;
+		url += "&response_type=code";
+		url += "&redirect_uri=" + encodeURI(redirect_uri);
+		url += "&show_dialog=true";
+		url += "&scope=user-read-private user-read-email user-modify-playback-state user-read-playback-position user-library-read streaming user-read-playback-state user-read-recently-played user-top-read user-follow-read playlist-modify-public playlist-modify-private"; //all the authorizations we ask for
+		window.location.href = url;
+	}
+
 
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>Login</Text>
 			<TextInput
-				style={styles.input}
-
-				returnKeyType="next"
-
-				onChangeText={(input) => setEmail(input)}
-				placeholder="Id"
-				value={email}
+				style={{
+					height: 30,
+					width: '75%',
+					borderColor: 'gray',
+					borderWidth: 1,
+					color: 'white',
+					fontSize: 20
+				}}
+				onChangeText={(input) => setText(input)}
+				placeholder="Client ID"
+				value={clientId}
 			/>
 			<TextInput
-				style={styles.input}
-				onChangeText={(input) => setPassword(input)}
-				placeholder="Password"
-				value={password}
-				secureTextEntry
+				style={{
+					height: 30,
+					width: '75%',
+					borderColor: 'gray',
+					borderWidth: 1,
+					color: 'white',
+					fontSize: 20
+				}}
+				onChangeText={(input) => setTittle(input)}
+				placeholder="Client Secret"
+				value={clientSecret}
 			/>
 			<a href='MdpOublie'>
 				<Text style={styles.textright}>Mot de passe oubliÃ©</Text>
@@ -41,12 +73,12 @@ export default function Screen() {
 				<a href='SpotifyLogin'>
 					<Text style={styles.title}>Sign up with Spotify</Text>
 
-
-
 					<Entypo name="spotify" size={24} color="white" style={{ marginHorizontal: 20 }} />
 				</a>
 
 			</View>
+
+			<Bouton text="Connect" test={requestAuthorization} />
 
 			{/* Use a light status bar on iOS to account for the black space above the  */}
 			<StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
