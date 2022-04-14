@@ -3,7 +3,7 @@ import { Platform, StyleSheet, TextInput } from 'react-native';
 import Colors from '../constants/Colors';
 import { Entypo } from '@expo/vector-icons';
 import Bouton from '../components/Bouton';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 
 import { Text, View } from '../components/Themed';
@@ -15,8 +15,6 @@ export default function Screen() {
 	const [clientId, setText] = React.useState('');
 	const [clientSecret, setTittle] = React.useState('');
 	var redirect_uri = "http://localhost:19006"; //change to your host link
-
-	const [authExec, setAuthExec] = React.useState(0);
 
 	function requestAuthorization() {
 		var client_id = clientId;
