@@ -1,4 +1,3 @@
-import { ObjectId } from "bson";
 import ProfilesDAO from "../dao/profilesDAO.js";
 
 export default class ProfilesCtrl {
@@ -31,6 +30,10 @@ export default class ProfilesCtrl {
         try {
             const userInfo = {
                 name: req.body.name,
+                clientId: req.body.clientId,
+                clientSecret: req.body.clientSecret,
+                token: req.body.token,
+                refreshToken: req.body.refreshToken,
             }
             const date = new Date()
 
@@ -38,6 +41,22 @@ export default class ProfilesCtrl {
                 userInfo,
                 date,
             )
+            res.json({ status: "success" })
+        } catch (e) {
+            res.status(500).json({ error: e.message })
+        }
+    }
+
+    static async apiDeleteProfile(req, res, next) {
+        try {
+            const profileId = req.body.id;
+            const profileName = req.body.name
+            console.log(profileId)
+            const profileResponse = await ProfilesDAO.deleteProfile(
+                profileId,
+                profileName,
+            )
+            // error ? (the returned status is always success for all functions)
             res.json({ status: "success" })
         } catch (e) {
             res.status(500).json({ error: e.message })

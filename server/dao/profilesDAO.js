@@ -57,12 +57,28 @@ export default class ProfilesDAO {
         try {
             const reviewDoc = {
                 name: profile.name,
+                clientId: profile.clientId,
+                clientSecret: profile.clientSecret,
+                token: profile.token,
+                refreshToken: profile.refreshToken,
                 date: date,
             }
 
             return await profiles.insertOne(reviewDoc)
         } catch (e) {
             console.error(`Unable to post profile: ${e}`)
+            return { error: e }
+        }
+    }
+
+    static async deleteProfile(profileId, profileName) {
+        try {
+            return await profiles.deleteOne({
+                _id: ObjectId(profileId),
+                name: profileName,
+            })
+        } catch (e) {
+            console.error(`Unable to delete profile: ${e}`)
             return { error: e }
         }
     }
