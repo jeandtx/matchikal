@@ -16,22 +16,15 @@ export default function TabOneScreen() {
 			window.localStorage.setItem('token', token);
 		}
 
-	}, [])
+	}, []);
+
 	return (
-
 		<View style={styles.container}>
-
 			<Text style={styles.title}>MATCHIKAL</Text>
 			<View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-
-
-
-
 			<Bouton text="Create a Matchikal" test={() => console.log("Clicked on the Button")} />
 			<Bouton text="Matchikal a Friend" test={() => console.log("Clicked on the Button")} />
-
 		</View>
-
 	);
 }
 
