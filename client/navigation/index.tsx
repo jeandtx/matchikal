@@ -93,6 +93,7 @@ function BottomTabNavigator() {
 							style={({ pressed }) => ({
 								opacity: pressed ? 0.5 : 1,
 							})}>
+							{/* // error: The if statement in only triggered when reload not when navigate */}
 							{!window.localStorage.getItem('token') ?
 								<AntDesign
 									name="login"
