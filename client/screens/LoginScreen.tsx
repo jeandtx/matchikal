@@ -16,9 +16,6 @@ export default function Screen() {
 	const [clientSecret, setTittle] = React.useState('433d24a1d12149cab578d1d47d3425ba');
 	var redirect_uri = "http://localhost:19006"; //change to your host link
 
-
-
-
 	function requestAuthorization() {
 		var client_id = clientId;
 		var client_secret = clientSecret;
