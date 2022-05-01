@@ -4,7 +4,6 @@ import Colors from '../constants/Colors';
 import { Entypo } from '@expo/vector-icons';
 import Bouton from '../components/Bouton';
 import React from 'react';
-import axios from 'axios';
 
 
 import { Text, View } from '../components/Themed';
@@ -18,6 +17,8 @@ export default function Screen() {
 	var redirect_uri = "http://localhost:19006"; //change to your host link
 
 
+
+
 	function requestAuthorization() {
 		var client_id = clientId;
 		var client_secret = clientSecret;
@@ -26,25 +27,11 @@ export default function Screen() {
 
 		let url = AUTHORIZE;
 		url += "?client_id=" + client_id;
-		url += "&response_type=code";
+		url += "&response_type=token";
 		url += "&redirect_uri=" + encodeURI(redirect_uri);
 		url += "&show_dialog=true";
 		url += "&scope=user-read-private user-read-email user-modify-playback-state user-read-playback-position user-library-read streaming user-read-playback-state user-read-recently-played user-top-read user-follow-read playlist-modify-public playlist-modify-private"; //all the authorizations we ask for
 		window.location.href = url;
-		sendToAPI();
-	}
-
-	function sendToAPI() {
-		axios({
-			method: 'post',
-			url: 'http://localhost:8080/api/v1/profiles',
-			data: {
-				"name": "testfromfront",
-			},
-			transformResponse: (r: JSON) => r
-		}).then((response) => {
-			console.log(response);
-		})
 	}
 
 	return (
