@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet, TextInput } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import Colors from '../constants/Colors';
-import { Entypo } from '@expo/vector-icons';
 import Bouton from '../components/Bouton';
 import React from 'react';
 
