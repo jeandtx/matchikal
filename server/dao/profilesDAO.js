@@ -82,4 +82,48 @@ export default class ProfilesDAO {
             return { error: e }
         }
     }
+
+    static async getProfilesById(id) {
+        try {
+            const pipeline = [
+                {
+                    $match: {
+                        _id: new ObjectId(id),
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "profiles",
+                        let: {
+                            id: "$_id",
+                        },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: ["$profile_id", "$$id"],
+                                    },
+                                },
+                            },
+                            {
+                                $sort: {
+                                    date: -1,
+                                },
+                            },
+                        ],
+                        as: "profiles",
+                    },
+                },
+                {
+                    $addFields: {
+                        profiles: "$profiles",
+                    },
+                },
+            ]
+            return await profiles.aggregate(pipeline).next()
+        } catch (e) {
+            console.error(`Something went wrong in getRestaurantByID: ${e}`)
+            throw e
+        }
+    }
 }
