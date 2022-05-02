@@ -9,6 +9,18 @@ import axios from 'axios';
 
 export default function Screen({ navigation }: RootStackScreenProps<'Account'>) {
 
+	const [accountData, setAccountData] = React.useState({
+		_id: "",
+		app: {
+			name: "",
+			id: "",
+			email: "",
+			country: ""
+		},
+		date: "",
+		name: ""
+	});
+
 	useEffect(() => {
 		let token = window.localStorage.getItem('token');
 
@@ -23,28 +35,31 @@ export default function Screen({ navigation }: RootStackScreenProps<'Account'>) 
 				axios({
 					method: 'get',
 					url: 'http://localhost:8080/api/v1/profiles/id/' + r.data.id,
-				}).catch((err) => {
-					if (err.response.status === 404) {
-						console.log("no account in our database. Creating one");
-						axios({
-							method: 'post',
-							url: 'http://localhost:8080/api/v1/profiles',
-							data: {
-								name: r.data.display_name,
-								app: {
-									country: r.data.country,
-									display_name: r.data.display_name,
-									email: r.data.email,
-									id: r.data.id,
+				}).then((response) => {
+					setAccountData(response.data);
+				})
+					.catch((err) => {
+						if (err.response.status === 404) {
+							console.log("no account in our database. Creating one");
+							axios({
+								method: 'post',
+								url: 'http://localhost:8080/api/v1/profiles',
+								data: {
+									name: r.data.display_name,
+									app: {
+										country: r.data.country,
+										display_name: r.data.display_name,
+										email: r.data.email,
+										id: r.data.id,
+									}
 								}
-							}
-						}).catch((error) => {
-							console.log(error);
-						});
-					} else {
-						console.log(err);
-					}
-				});
+							}).catch((error) => {
+								console.log(error);
+							});
+						} else {
+							console.log(err);
+						}
+					});
 			}
 		})
 	}, []);
@@ -52,6 +67,21 @@ export default function Screen({ navigation }: RootStackScreenProps<'Account'>) 
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>Account Informations</Text>
+			<Text>Maybe try to get a photo from the spotify account</Text>
+			<Text>
+				ID: {accountData._id} <br />
+
+				date: {accountData.date}<br />
+				name: {accountData.name}<br />
+			</Text>
+			<Text>
+				app:<br />
+				name: {accountData.app.name}<br />
+				id: {accountData.app.id}<br />
+				email: {accountData.app.email}<br />
+				country: {accountData.app.country}<br />
+			</Text>
+
 			<Bouton text="Logout" test={() => {
 				window.localStorage.removeItem('token');
 				navigation.replace('Login');
