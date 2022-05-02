@@ -28,12 +28,15 @@ export default class ProfilesCtrl {
 
     static async apiPostProfile(req, res, next) {
         try {
+            const userAppInfo = {
+                name: req.body.app.display_name,
+                id: req.body.app.id,
+                email: req.body.app.email,
+                country: req.body.app.country
+            }
             const userInfo = {
                 name: req.body.name,
-                clientId: req.body.clientId,
-                clientSecret: req.body.clientSecret,
-                token: req.body.token,
-                refreshToken: req.body.refreshToken,
+                appInfo: userAppInfo
             }
             const date = new Date()
 
@@ -68,7 +71,7 @@ export default class ProfilesCtrl {
             let id = req.params.id || {}
             let profile = await ProfilesDAO.getProfilesById(id)
             if (!profile) {
-                res.status(404).json({ error: "Not found" })
+                res.status(404).json({ error: "Not found in the database" })
                 return
             }
             res.json(profile)

@@ -57,10 +57,12 @@ export default class ProfilesDAO {
         try {
             const reviewDoc = {
                 name: profile.name,
-                clientId: profile.clientId,
-                clientSecret: profile.clientSecret,
-                token: profile.token,
-                refreshToken: profile.refreshToken,
+                app: {
+                    name: profile.appInfo.name,
+                    id: profile.appInfo.id,
+                    email: profile.appInfo.email,
+                    country: profile.appInfo.country,
+                },
                 date: date,
             }
 
@@ -88,41 +90,13 @@ export default class ProfilesDAO {
             const pipeline = [
                 {
                     $match: {
-                        _id: new ObjectId(id),
+                        'app.name': id,
                     },
-                },
-                {
-                    $lookup: {
-                        from: "profiles",
-                        let: {
-                            id: "$_id",
-                        },
-                        pipeline: [
-                            {
-                                $match: {
-                                    $expr: {
-                                        $eq: ["$profile_id", "$$id"],
-                                    },
-                                },
-                            },
-                            {
-                                $sort: {
-                                    date: -1,
-                                },
-                            },
-                        ],
-                        as: "profiles",
-                    },
-                },
-                {
-                    $addFields: {
-                        profiles: "$profiles",
-                    },
-                },
+                }
             ]
             return await profiles.aggregate(pipeline).next()
         } catch (e) {
-            console.error(`Something went wrong in getRestaurantByID: ${e}`)
+            console.error(`Something went wrong in getProfilesById: ${e}`)
             throw e
         }
     }
