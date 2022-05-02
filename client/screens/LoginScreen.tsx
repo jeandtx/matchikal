@@ -12,8 +12,8 @@ export default function Screen() {
 
 	const AUTHORIZE = "https://accounts.spotify.com/authorize";
 
-	const [clientId, setText] = React.useState('a4bf3a6d2a1640eeaff76c0764a15e10');
-	const [clientSecret, setTittle] = React.useState('433d24a1d12149cab578d1d47d3425ba');
+	const clientId = 'a4bf3a6d2a1640eeaff76c0764a15e10';
+	const clientSecret = '433d24a1d12149cab578d1d47d3425ba';
 	var redirect_uri = "http://localhost:19006"; //change to your host link
 
 	function requestAuthorization() {
@@ -34,47 +34,6 @@ export default function Screen() {
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>Login</Text>
-			<TextInput
-				style={{
-					height: 30,
-					width: '75%',
-					borderColor: 'gray',
-					borderWidth: 1,
-					color: 'white',
-					fontSize: 20
-				}}
-				onChangeText={(input) => setText(input)}
-				placeholder="Client ID"
-				value={clientId}
-			/>
-			<TextInput
-				style={{
-					height: 30,
-					width: '75%',
-					borderColor: 'gray',
-					borderWidth: 1,
-					color: 'white',
-					fontSize: 20
-				}}
-				onChangeText={(input) => setTittle(input)}
-				placeholder="Client Secret"
-				value={clientSecret}
-			/>
-			<a href='MdpOublie'>
-				<Text style={styles.textright}>Mot de passe oubliÃ©</Text>
-
-			</a>
-			<View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-			<Text style={styles.title}>Sign up</Text>
-			<View style={styles.sameLine}>
-				<a href='SpotifyLogin'>
-					<Text style={styles.title}>Sign up with Spotify</Text>
-
-					<Entypo name="spotify" size={24} color="white" style={{ marginHorizontal: 20 }} />
-				</a>
-
-			</View>
-
 			<Bouton text="Connect" test={requestAuthorization} />
 
 			{/* Use a light status bar on iOS to account for the black space above the  */}
