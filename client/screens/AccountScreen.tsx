@@ -21,6 +21,50 @@ export default function Screen({ navigation }: RootStackScreenProps<'Account'>) 
 		name: ""
 	});
 
+	function Loading(error: any) {
+		if (error instanceof TypeError) {
+			setAccountData({
+				_id: "Loading…",
+				app: {
+					name: "Loading…",
+					id: "Loading…",
+					email: "Loading…",
+					country: "Loading…"
+				},
+				date: "Loading…",
+				name: "Loading…"
+			})
+		}
+	}
+
+	function AddToDatabase(res: any, err: any) {
+		try {
+			if (err.response.status === 404) {
+				console.log("no account in our database. Creating one");
+				axios({
+					method: 'post',
+					url: 'http://localhost:8080/api/v1/profiles',
+					data: {
+						name: res.data.display_name,
+						app: {
+							country: res.data.country,
+							display_name: res.data.display_name,
+							email: res.data.email,
+							id: res.data.id,
+						}
+					}
+				}).catch((error) => {
+					console.log(error);
+				});
+			} else {
+				console.log(err);
+			}
+
+		} catch (error) {
+			Loading(error);
+		}
+	}
+
 	useEffect(() => {
 		let token = window.localStorage.getItem('token');
 
@@ -37,29 +81,9 @@ export default function Screen({ navigation }: RootStackScreenProps<'Account'>) 
 					url: 'http://localhost:8080/api/v1/profiles/id/' + r.data.id,
 				}).then((response) => {
 					setAccountData(response.data);
-				})
-					.catch((err) => {
-						if (err.response.status === 404) {
-							console.log("no account in our database. Creating one");
-							axios({
-								method: 'post',
-								url: 'http://localhost:8080/api/v1/profiles',
-								data: {
-									name: r.data.display_name,
-									app: {
-										country: r.data.country,
-										display_name: r.data.display_name,
-										email: r.data.email,
-										id: r.data.id,
-									}
-								}
-							}).catch((error) => {
-								console.log(error);
-							});
-						} else {
-							console.log(err);
-						}
-					});
+				}).catch((err) => {
+					AddToDatabase(r, err);
+				});
 			}
 		})
 	}, []);
