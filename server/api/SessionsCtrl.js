@@ -58,4 +58,17 @@ export default class SessionsCtrl {
             res.status(500).json({ error: e.message })
         }
     }
+
+    static async apiDeleteSession(req, res, next) {
+        try {
+            const sessionId = req.body.id;
+            const profileResponse = await SessionsDAO.deleteSession(
+                sessionId,
+            )
+            // error ? (the returned status is always success for all functions)
+            res.json({ status: "success" })
+        } catch (e) {
+            res.status(500).json({ error: e.message })
+        }
+    }
 }

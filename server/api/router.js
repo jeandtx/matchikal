@@ -12,5 +12,6 @@ router.route("/profiles").delete(ProfilesCtrl.apiDeleteProfile);
 router.route("/sessions").get(SessionsCtrl.apiGetSessions);
 router.route("/sessions/id/:id").get(SessionsCtrl.apiGetSessionById);
 router.route("/sessions").post(SessionsCtrl.apiPostSession);
+router.route("/sessions").delete(SessionsCtrl.apiDeleteSession);
 
 export default router;

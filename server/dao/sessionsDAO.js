@@ -111,4 +111,15 @@ export default class SessionsDAO {
             return { error: e }
         }
     }
+
+    static async deleteSession(profileId) {
+        try {
+            return await sessions.deleteOne({
+                _id: ObjectId(profileId),
+            })
+        } catch (e) {
+            console.error(`Unable to delete profile: ${e}`)
+            return { error: e }
+        }
+    }
 }
