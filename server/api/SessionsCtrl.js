@@ -26,4 +26,36 @@ export default class SessionsCtrl {
         };
         res.json(response);
     }
+
+    static async apiGetSessionById(req, res, next) {
+        try {
+            let id = req.params.id || {}
+            let session = await SessionsDAO.getSessionsById(id)
+            if (!session) {
+                res.status(404).json({ error: "Not found in the database" })
+                return
+            }
+            res.json(session)
+        } catch (e) {
+            console.log(`api, ${e}`)
+            res.status(500).json({ error: e + "Error is here" })
+        }
+    }
+
+    static async apiPostSession(req, res, next) {
+        try {
+            const sessionInfo = {
+                creator: req.body.creator,
+                connected: req.body.creator,
+            }
+            const date = new Date()
+            const ReviewResponse = await SessionsDAO.addSession(
+                sessionInfo,
+                date,
+            )
+            res.json({ status: "success" })
+        } catch (e) {
+            res.status(500).json({ error: e.message })
+        }
+    }
 }
