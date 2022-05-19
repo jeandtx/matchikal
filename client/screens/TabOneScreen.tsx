@@ -3,6 +3,7 @@ import Bouton from '../components/Bouton';
 import { Text, View } from '../components/Themed';
 import Colors from '../constants/Colors';
 import React, { useEffect } from 'react';
+import axios from 'axios';
 
 export default function TabOneScreen() {
 
@@ -14,6 +15,17 @@ export default function TabOneScreen() {
 			token = hash.split('#')[1].split('&')[0].split('=')[1];
 			window.location.hash = '';
 			window.localStorage.setItem('token', token);
+		}
+		if (token) {
+			axios({
+				method: 'get',
+				url: 'https://api.spotify.com/v1/me',
+				headers: {
+					'Authorization': 'Bearer ' + token
+				}
+			}).catch(() => {
+				window.localStorage.removeItem('token');
+			})
 		}
 
 	}, []);
