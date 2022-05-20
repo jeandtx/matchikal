@@ -4,8 +4,9 @@ import { Text, View } from '../components/Themed';
 import Colors from '../constants/Colors';
 import React, { useEffect } from 'react';
 import axios from 'axios';
+import { RootStackScreenProps } from '../types';
 
-export default function TabOneScreen() {
+export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'>) {
 
 	useEffect(() => {
 		const hash = window.location.hash;
@@ -30,12 +31,32 @@ export default function TabOneScreen() {
 
 	}, []);
 
+	function createSession() {
+		console.log('create session');
+		if (!window.localStorage.getItem('token')) {
+			navigation.replace('Login');
+		} else {
+			axios({
+				method: 'post',
+				url: 'http://localhost:8080/api/v1/sessions',
+				data: {
+					'creator': window.localStorage.getItem('token'),
+					'connected': window.localStorage.getItem('token')
+				},
+			}).then(response => {
+				console.log(response);
+			}).catch(error => {
+				console.log(error);
+			});
+		}
+	}
+
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>MATCHIKAL</Text>
 			<View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-			<Bouton text="Create a Matchikal" test={() => console.log("Clicked on the Button")} />
-			<Bouton text="Matchikal a Friend" test={() => console.log("Clicked on the Button")} />
+			<Bouton text="Create a Matchikal" test={() => createSession()} />
+			<Bouton text="Join a Mathcikal" test={() => console.log("Clicked on the Button")} />
 		</View>
 	);
 }

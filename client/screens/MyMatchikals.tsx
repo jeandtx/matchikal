@@ -7,16 +7,19 @@ import axios from 'axios';
 
 export default function MyMatchikals() {
 
-	function filterData(data: JSON) {
+	function filterData(array: any) {
 
-		return {
-			att1: '',
-			att2: {
-				att2_1: '',
-				att2_2: '',
-			},
-			att3: '',
+		let newArray: Array<Array<string>> = []
+		for (let index = 0; index < array.length; index++) {
+			newArray.push([])
+			newArray[index].push(array[index].track.artists[0].name)
+			newArray[index].push(array[index].track.name)
+			newArray[index].push(array[index].track.popularity)
+			newArray[index].push(array[index].added_at)
 		}
+		console.log(newArray);
+
+		return newArray;
 	}
 
 	function saveData(filteredData: Object) {
@@ -41,6 +44,7 @@ export default function MyMatchikals() {
 				}
 				else {
 					console.log(array);
+					filterData(array);
 					return array;
 				}
 			});
