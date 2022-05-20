@@ -10,32 +10,32 @@ import * as Linking from 'expo-linking';
 import { RootStackParamList } from '../types';
 
 const linking: LinkingOptions<RootStackParamList> = {
-  prefixes: [Linking.createURL('/')],
-  config: {
-    screens: {
-      Root: {
-        screens: {
-          Accueil: {
-            screens: {
-              TabOneScreen: 'one',
-            },
-          },
-          TabTwo: {
-            screens: {
-              TabTwoScreen: 'two',
-            },
-          },
-          Test: {
-            screens: {
-              TabThreeScreen: 'three',
-            },
-          },
-        },
-      },
-      Login: 'Login',
-      NotFound: '*',
-    },
-  },
+	prefixes: [Linking.createURL('/')],
+	config: {
+		screens: {
+			Root: {
+				screens: {
+					Accueil: {
+						screens: {
+							TabOneScreen: 'one',
+						},
+					},
+					TabTwo: {
+						screens: {
+							TabTwoScreen: 'two',
+						},
+					},
+					Session: {
+						screens: {
+							TabThreeScreen: 'three',
+						},
+					},
+				},
+			},
+			Login: 'Login',
+			NotFound: '*',
+		},
+	},
 };
 
 export default linking;

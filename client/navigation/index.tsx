@@ -16,7 +16,7 @@ import AccountScreen from '../screens/AccountScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import TabOneScreen from '../screens/TabOneScreen';
 import MyMatchikals from '../screens/MyMatchikals';
-import Test from '../screens/Test';
+import Session from '../screens/Session';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
@@ -119,10 +119,10 @@ function BottomTabNavigator() {
 				}}
 			/>
 			<BottomTab.Screen
-				name="Test"
-				component={Test}
+				name="Session"
+				component={Session}
 				options={{
-					title: 'Test',
+					title: 'Session',
 					tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
 				}}
 			/>

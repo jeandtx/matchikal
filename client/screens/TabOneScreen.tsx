@@ -13,17 +13,12 @@ export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'
 	useEffect(() => {
 		const hash = window.location.hash;
 		let token = window.localStorage.getItem('token');
-
-
 		if (!token && hash) {
 			token = hash.split('#')[1].split('&')[0].split('=')[1];
 			window.location.hash = '';
 			window.localStorage.setItem('token', token);
-
 		}
-
 		if (token) {
-
 			axios({
 				method: 'get',
 				url: 'https://api.spotify.com/v1/me',
@@ -34,11 +29,9 @@ export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'
 				window.localStorage.removeItem('token');
 			})
 		}
-
 	}, []);
 
 	function createSession() {
-		console.log('create session');
 		if (!window.localStorage.getItem('token')) {
 			navigation.replace('Login');
 		} else {
@@ -48,7 +41,7 @@ export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'
 			})
 				.then((res: any) => {
 					console.log('Session : ' + res.data._id);
-
+					navigation.navigate('Root', { screen: 'Session' });
 				})
 				.catch((err) => {
 					axios({
