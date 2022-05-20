@@ -36,21 +36,29 @@ export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'
 		if (!window.localStorage.getItem('token')) {
 			navigation.replace('Login');
 		} else {
-			// error here first try to get session by user as one user have one session max
-			// error then create only if it doesn't exist
-			// error then return the id of the session
 			axios({
-				method: 'post',
-				url: 'http://localhost:8080/api/v1/sessions',
-				data: {
-					'creator': window.localStorage.getItem('id'),
-					'connected': window.localStorage.getItem('display_name')
-				},
-			}).then(response => {
-				console.log("Created session: " + response.data.id);
-			}).catch(error => {
-				console.log(error);
-			});
+				method: 'get',
+				url: 'http://localhost:8080/api/v1/sessions/user/' + window.localStorage.getItem('id'),
+			})
+				.then((res: any) => {
+					console.log('Session : ' + res.data._id);
+
+				})
+				.catch((err) => {
+					axios({
+						method: 'post',
+						url: 'http://localhost:8080/api/v1/sessions',
+						data: {
+							'creator': window.localStorage.getItem('id'),
+							'connected': window.localStorage.getItem('display_name')
+						},
+					}).then(response => {
+						console.log("Created session for user " + window.localStorage.getItem('display_name'));
+						createSession();
+					}).catch(error => {
+						console.log(error);
+					});
+				});
 		}
 	}
 
