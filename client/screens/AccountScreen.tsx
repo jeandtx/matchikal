@@ -85,8 +85,12 @@ export default function Screen({ navigation }: RootStackScreenProps<'Account'>) 
 					AddToDatabase(r, err);
 				});
 			}
-		})
-	}, []);
+		});
+
+		localStorage.setItem('display_name', accountData.name);
+		localStorage.setItem('id', accountData.app.id);
+
+	}, [accountData]);
 
 	return (
 		<View style={styles.container}>

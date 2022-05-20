@@ -1,11 +1,14 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TextInput } from 'react-native';
 import Bouton from '../components/Bouton';
 import { Text, View } from '../components/Themed';
 import Colors from '../constants/Colors';
 import React, { useEffect } from 'react';
 import axios from 'axios';
+import { RootStackScreenProps } from '../types';
 
-export default function TabOneScreen() {
+export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'>) {
+
+	const [sessionID, setSessionID] = React.useState('');
 
 	useEffect(() => {
 		const hash = window.location.hash;
@@ -34,12 +37,67 @@ export default function TabOneScreen() {
 
 	}, []);
 
+	function createSession() {
+		console.log('create session');
+		if (!window.localStorage.getItem('token')) {
+			navigation.replace('Login');
+		} else {
+			axios({
+				method: 'get',
+				url: 'http://localhost:8080/api/v1/sessions/user/' + window.localStorage.getItem('id'),
+			})
+				.then((res: any) => {
+					console.log('Session : ' + res.data._id);
+
+				})
+				.catch((err) => {
+					axios({
+						method: 'post',
+						url: 'http://localhost:8080/api/v1/sessions',
+						data: {
+							'creator': window.localStorage.getItem('id'),
+							'connected': window.localStorage.getItem('display_name')
+						},
+					}).then(response => {
+						console.log("Created session for user " + window.localStorage.getItem('display_name'));
+						createSession();
+					}).catch(error => {
+						console.log(error);
+					});
+				});
+		}
+	}
+
+	function joinSession() {
+		axios({
+			method: 'get',
+			url: 'http://localhost:8080/api/v1/sessions/id/' + sessionID,
+		}).then(response => {
+			console.log("Joined session " + response.data._id);
+		}).catch(() => {
+			console.log("Session not found");
+		});
+	}
+
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>MATCHIKAL</Text>
 			<View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-			<Bouton text="Create a Matchikal" test={() => console.log("Clicked on the Button")} />
-			<Bouton text="Matchikal a Friend" test={() => console.log("Clicked on the Button")} />
+			<Bouton text="Create a Matchikal" test={() => createSession()} />
+			<TextInput
+				style={{
+					height: 80,
+					width: '70%',
+					borderColor: 'gray',
+					borderWidth: 1,
+					color: 'white',
+					fontSize: 20
+				}}
+				onChangeText={(input) => setSessionID(input)}
+				placeholder="Enter the Session ID"
+				value={sessionID}
+			/>
+			<Bouton text="Join a Mathcikal" test={() => joinSession()} />
 		</View>
 	);
 }
