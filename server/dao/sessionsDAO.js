@@ -138,4 +138,19 @@ export default class SessionsDAO {
             return { error: e }
         }
     }
+
+    static async updateSession(sessionId, toadd) {
+        try {
+            return await sessions.updateOne({
+                _id: ObjectId(sessionId),
+            }, {
+                $push: {
+                    connected: toadd,
+                },
+            })
+        } catch (e) {
+            console.error(`Unable to update session: ${e}`)
+            return { error: e }
+        }
+    }
 }

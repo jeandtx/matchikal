@@ -14,5 +14,6 @@ router.route("/sessions/id/:id").get(SessionsCtrl.apiGetSessionById);
 router.route("/sessions/user/:user").get(SessionsCtrl.apiGetSessionByProfile);
 router.route("/sessions").post(SessionsCtrl.apiPostSession);
 router.route("/sessions").delete(SessionsCtrl.apiDeleteSession);
+router.route("/sessions").put(SessionsCtrl.apiPutSession);
 
 export default router;

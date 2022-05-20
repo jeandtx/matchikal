@@ -86,4 +86,18 @@ export default class SessionsCtrl {
             res.status(500).json({ error: e.message })
         }
     }
+
+    static async apiPutSession(req, res, next) {
+        try {
+            const sessionId = req.body.id;
+            const newUser = req.body.newUser;
+            const profileResponse = await SessionsDAO.updateSession(
+                sessionId,
+                newUser,
+            )
+            res.json({ status: "success" })
+        } catch (e) {
+            res.status(500).json({ error: e.message })
+        }
+    }
 }
