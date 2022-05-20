@@ -11,6 +11,7 @@ router.route("/profiles").delete(ProfilesCtrl.apiDeleteProfile);
 
 router.route("/sessions").get(SessionsCtrl.apiGetSessions);
 router.route("/sessions/id/:id").get(SessionsCtrl.apiGetSessionById);
+router.route("/sessions/user/:user").get(SessionsCtrl.apiGetSessionByProfile);
 router.route("/sessions").post(SessionsCtrl.apiPostSession);
 router.route("/sessions").delete(SessionsCtrl.apiDeleteSession);
 

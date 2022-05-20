@@ -97,6 +97,22 @@ export default class SessionsDAO {
         }
     }
 
+    static async getSessionsByProfile(id) {
+        try {
+            const pipeline = [
+                {
+                    $match: {
+                        'creator': id,
+                    },
+                }
+            ]
+            return await sessions.aggregate(pipeline).next()
+        } catch (e) {
+            console.error(`Something went wrong in getSessionsByProfile: ${e}`)
+            throw e
+        }
+    }
+
     static async addSession(session, date) {
         try {
             const reviewDoc = {

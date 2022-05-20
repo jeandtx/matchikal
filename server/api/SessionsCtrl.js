@@ -42,6 +42,22 @@ export default class SessionsCtrl {
         }
     }
 
+    static async apiGetSessionByProfile(req, res, next) {
+        try {
+            let id = req.params.user || {}
+            console.log(id);
+            let session = await SessionsDAO.getSessionsByProfile(id)
+            if (!session) {
+                res.status(404).json({ error: "Not found in the database" })
+                return
+            }
+            res.json(session)
+        } catch (e) {
+            console.log(`api, ${e}`)
+            res.status(500).json({ error: e + "Error is here 56" })
+        }
+    }
+
     static async apiPostSession(req, res, next) {
         try {
             const sessionInfo = {
