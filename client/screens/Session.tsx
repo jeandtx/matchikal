@@ -1,36 +1,11 @@
-import { Image, StyleSheet, TextInput } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Text, View } from '../components/Themed';
-import React, { useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import Feed from '../components/Feed';
 import SessionCard from '../components/SessionCard';
 
 
-export default function Test() {
-	// const [i, setI] = React.useState(0);
-	// const [title, setTitle] = React.useState('Test Page');
-	// const [text, setText] = React.useState('Change the title of the page');
-
-	// const [imageURL, setImageURL] = React.useState('');
-	// const [name, setName] = React.useState('');
-
-	// useEffect(() => {
-	// 	axios({
-	// 		method: 'get',
-	// 		url: 'https://randomuser.me/api/',
-	// 		transformResponse: (r: JSON) => r
-	// 	}).then((response) => {
-	// 		let datajson = JSON.parse(response.data);
-	// 		if (datajson.results[0].gender === 'male') {
-	// 			setI(i + 1);
-	// 		} else {
-	// 			setImageURL(datajson.results[0].picture.large);
-	// 			setName(datajson.results[0].name.first + ' ' + datajson.results[0].name.last);
-	// 		}
-	// 		console.log(i);
-	// 	})
-	// }, [i]);
-
+export default function Session() {
 	const DATA = [
 		{
 			user_name: 'Freeze Corleone',
@@ -51,7 +26,6 @@ export default function Test() {
 
 		},
 	]
-
 	const DATA_SESION = [
 		{
 
@@ -70,15 +44,10 @@ export default function Test() {
 
 		},
 	]
-
 	const session_id = 3
 
-
-
 	return (
-
 		<View style={styles.container}>
-
 			<View style={styles.cardSession}>
 				<View>
 					<View style={styles.sessionID}>
@@ -102,7 +71,6 @@ export default function Test() {
 				<Feed user_name={DATA[2].user_name} user_image={DATA[2].user_image} song_name={DATA[2].song_name}
 				/>
 			</View>
-
 		</View >
 	);
 }
