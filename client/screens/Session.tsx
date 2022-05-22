@@ -1,36 +1,14 @@
-import { Image, StyleSheet, TextInput } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Text, View } from '../components/Themed';
 import React, { useEffect } from 'react';
-import axios from 'axios';
 import Feed from '../components/Feed';
 import SessionCard from '../components/SessionCard';
+import Bouton from '../components/Bouton';
+import { RootStackScreenProps } from '../types';
+import axios from 'axios';
 
 
-export default function Test() {
-	// const [i, setI] = React.useState(0);
-	// const [title, setTitle] = React.useState('Test Page');
-	// const [text, setText] = React.useState('Change the title of the page');
-
-	// const [imageURL, setImageURL] = React.useState('');
-	// const [name, setName] = React.useState('');
-
-	// useEffect(() => {
-	// 	axios({
-	// 		method: 'get',
-	// 		url: 'https://randomuser.me/api/',
-	// 		transformResponse: (r: JSON) => r
-	// 	}).then((response) => {
-	// 		let datajson = JSON.parse(response.data);
-	// 		if (datajson.results[0].gender === 'male') {
-	// 			setI(i + 1);
-	// 		} else {
-	// 			setImageURL(datajson.results[0].picture.large);
-	// 			setName(datajson.results[0].name.first + ' ' + datajson.results[0].name.last);
-	// 		}
-	// 		console.log(i);
-	// 	})
-	// }, [i]);
-
+export default function Session({ navigation }: RootStackScreenProps<'Session'>) {
 	const DATA = [
 		{
 			user_name: 'Freeze Corleone',
@@ -51,7 +29,6 @@ export default function Test() {
 
 		},
 	]
-
 	const DATA_SESION = [
 		{
 
@@ -71,19 +48,44 @@ export default function Test() {
 		},
 	]
 
-	const session_id = 3
+	const [sessionID, setSessionID] = React.useState('No session');
 
+	useEffect(() => {
+		const id = window.localStorage.getItem('session') || 'No session';
+		console.log('sessionID', id);
+		setSessionID(id);
+	}, []);
 
+	function leaveSession() {
+		axios({
+			method: 'get',
+			url: 'http://localhost:8080/api/v1/sessions/id/' + sessionID,
+		}).then((res) => {
+			if (res.data.creator == window.localStorage.getItem('id')) {
+				axios({
+					method: 'delete',
+					url: 'http://localhost:8080/api/v1/sessions/',
+					data: {
+						id: sessionID
+					}
+				}).then((res) => {
+					console.log(window.localStorage.getItem('display_name') + ' Ended the session ' + sessionID);
+					window.localStorage.removeItem('session');
+					navigation.navigate('Root');
+				})
+			} else {
+				console.log(window.localStorage.getItem('display_name') + ' Leaved the session ' + sessionID);
+				window.localStorage.removeItem('session');
+				navigation.replace('Root');
+			}
+		})
+	}
 
 	return (
-
 		<View style={styles.container}>
-
 			<View style={styles.cardSession}>
 				<View>
-					<View style={styles.sessionID}>
-						<Text style={styles.sessionID}> SESSION {session_id} </Text>
-					</View>
+					<Text style={styles.sessionID}>Session: {sessionID} </Text>
 				</View>
 				<View style={styles.cardSessionBody}>
 					<SessionCard spot_user_name={DATA_SESION[0].spot_user_name} spot_user_image={DATA_SESION[0].spot_user_image}
@@ -102,7 +104,10 @@ export default function Test() {
 				<Feed user_name={DATA[2].user_name} user_image={DATA[2].user_image} song_name={DATA[2].song_name}
 				/>
 			</View>
-
+			<Bouton text='Leave Session' test={() => {
+				console.log('Leaving the session ' + sessionID);
+				leaveSession();
+			}} />
 		</View >
 	);
 }
@@ -128,7 +133,7 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
-		fontSize: 20,
+		fontSize: 15,
 		color: '#000',
 		fontWeight: 'bold',
 		backgroundColor: '#eee',

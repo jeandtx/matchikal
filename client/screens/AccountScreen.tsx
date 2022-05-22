@@ -112,7 +112,7 @@ export default function Screen({ navigation }: RootStackScreenProps<'Account'>) 
 
 			<Bouton text="Logout" test={() => {
 				window.localStorage.removeItem('token');
-				navigation.replace('Login');
+				navigation.navigate('Login');
 			}} />
 		</View>
 	);
