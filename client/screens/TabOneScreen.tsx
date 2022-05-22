@@ -71,6 +71,8 @@ export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'
 			url: 'http://localhost:8080/api/v1/sessions/id/' + sessionID,
 		}).then(response => {
 			console.log("Joined session " + response.data._id);
+			window.localStorage.setItem('session', response.data._id);
+			navigation.replace('Session');
 		}).catch(() => {
 			console.log("Session not found");
 		});

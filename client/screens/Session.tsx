@@ -57,7 +57,6 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 	}, []);
 
 	function leaveSession() {
-
 		axios({
 			method: 'get',
 			url: 'http://localhost:8080/api/v1/sessions/id/' + sessionID,
