@@ -14,9 +14,9 @@ import Colors from '../constants/Colors';
 import LoginScreen from '../screens/LoginScreen';
 import AccountScreen from '../screens/AccountScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
+import Session from '../screens/Session';
 import TabOneScreen from '../screens/TabOneScreen';
 import MyMatchikals from '../screens/MyMatchikals';
-import Session from '../screens/Session';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
@@ -54,6 +54,7 @@ function RootNavigator() {
 		<Stack.Navigator>
 			<Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
 			<Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+			<Stack.Screen name="Session" component={Session} options={{ title: 'Session' }} />
 			<Stack.Group screenOptions={{ presentation: 'modal' }}>
 				<Stack.Screen name="Login" component={LoginScreen} />
 				<Stack.Screen name="Account" component={AccountScreen} />
@@ -116,14 +117,6 @@ function BottomTabNavigator() {
 				options={{
 					title: 'My Matchikals',
 					tabBarIcon: ({ color }) => <TabBarIcon name="music" color={color} />,
-				}}
-			/>
-			<BottomTab.Screen
-				name="Session"
-				component={Session}
-				options={{
-					title: 'Session',
-					tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
 				}}
 			/>
 		</BottomTab.Navigator>

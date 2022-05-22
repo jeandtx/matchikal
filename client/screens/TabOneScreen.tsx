@@ -41,7 +41,8 @@ export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'
 			})
 				.then((res: any) => {
 					console.log('Session : ' + res.data._id);
-					navigation.navigate('Root', { screen: 'Session' });
+					window.localStorage.setItem('session', res.data._id);
+					navigation.navigate('Session');
 				})
 				.catch((err) => {
 					axios({

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { Text, View } from '../components/Themed';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Feed from '../components/Feed';
 import SessionCard from '../components/SessionCard';
 
@@ -44,15 +44,20 @@ export default function Session() {
 
 		},
 	]
-	const session_id = 3
+
+	const [sessionID, setSessionID] = React.useState('No session');
+
+	useEffect(() => {
+		const id = window.localStorage.getItem('session') || 'No session';
+		console.log('sessionID', id);
+		setSessionID(id);
+	}, []);
 
 	return (
 		<View style={styles.container}>
 			<View style={styles.cardSession}>
 				<View>
-					<View style={styles.sessionID}>
-						<Text style={styles.sessionID}> SESSION {session_id} </Text>
-					</View>
+					<Text style={styles.sessionID}>Session: {sessionID} </Text>
 				</View>
 				<View style={styles.cardSessionBody}>
 					<SessionCard spot_user_name={DATA_SESION[0].spot_user_name} spot_user_image={DATA_SESION[0].spot_user_image}
@@ -96,7 +101,7 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
-		fontSize: 20,
+		fontSize: 15,
 		color: '#000',
 		fontWeight: 'bold',
 		backgroundColor: '#eee',

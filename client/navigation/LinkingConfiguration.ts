@@ -25,15 +25,11 @@ const linking: LinkingOptions<RootStackParamList> = {
 							TabTwoScreen: 'two',
 						},
 					},
-					Session: {
-						screens: {
-							TabThreeScreen: 'three',
-						},
-					},
 				},
 			},
 			Login: 'Login',
 			NotFound: '*',
+			Session: 'Session',
 		},
 	},
 };
