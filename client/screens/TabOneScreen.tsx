@@ -29,11 +29,14 @@ export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'
 				window.localStorage.removeItem('token');
 			})
 		}
+		if (window.localStorage.getItem('session')) {
+			navigation.replace('Session');
+		}
 	}, []);
 
 	function createSession() {
 		if (!window.localStorage.getItem('token')) {
-			navigation.replace('Login');
+			navigation.navigate('Login');
 		} else {
 			axios({
 				method: 'get',
@@ -42,7 +45,7 @@ export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'
 				.then((res: any) => {
 					console.log('Session : ' + res.data._id);
 					window.localStorage.setItem('session', res.data._id);
-					navigation.navigate('Session');
+					navigation.replace('Session');
 				})
 				.catch((err) => {
 					axios({

@@ -3,9 +3,12 @@ import { Text, View } from '../components/Themed';
 import React, { useEffect } from 'react';
 import Feed from '../components/Feed';
 import SessionCard from '../components/SessionCard';
+import Bouton from '../components/Bouton';
+import { RootStackScreenProps } from '../types';
+import axios from 'axios';
 
 
-export default function Session() {
+export default function Session({ navigation }: RootStackScreenProps<'Session'>) {
 	const DATA = [
 		{
 			user_name: 'Freeze Corleone',
@@ -53,6 +56,32 @@ export default function Session() {
 		setSessionID(id);
 	}, []);
 
+	function leaveSession() {
+
+		axios({
+			method: 'get',
+			url: 'http://localhost:8080/api/v1/sessions/id/' + sessionID,
+		}).then((res) => {
+			if (res.data.creator == window.localStorage.getItem('id')) {
+				axios({
+					method: 'delete',
+					url: 'http://localhost:8080/api/v1/sessions/',
+					data: {
+						id: sessionID
+					}
+				}).then((res) => {
+					console.log(window.localStorage.getItem('display_name') + ' Ended the session ' + sessionID);
+					window.localStorage.removeItem('session');
+					navigation.navigate('Root');
+				})
+			} else {
+				console.log(window.localStorage.getItem('display_name') + ' Leaved the session ' + sessionID);
+				window.localStorage.removeItem('session');
+				navigation.replace('Root');
+			}
+		})
+	}
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.cardSession}>
@@ -76,6 +105,10 @@ export default function Session() {
 				<Feed user_name={DATA[2].user_name} user_image={DATA[2].user_image} song_name={DATA[2].song_name}
 				/>
 			</View>
+			<Bouton text='Leave Session' test={() => {
+				console.log('Leaving the session ' + sessionID);
+				leaveSession();
+			}} />
 		</View >
 	);
 }
