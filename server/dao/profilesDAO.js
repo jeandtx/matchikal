@@ -90,7 +90,7 @@ export default class ProfilesDAO {
             const pipeline = [
                 {
                     $match: {
-                        'app.name': id,
+                        'app.id': id,
                     },
                 }
             ]
