@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput } from 'react-native';
+import { Image, StyleSheet, TextInput } from 'react-native';
 import Bouton from '../components/Bouton';
 import { Text, View } from '../components/Themed';
 import Colors from '../constants/Colors';
@@ -79,18 +79,25 @@ export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'
 	}
 
 	return (
-		<View style={styles.container}>
+		<View style={styles.container}> 
+      <Image source={require('../assets/images/image-removebg-preview.png')} />
 			<Text style={styles.title}>MATCHIKAL</Text>
-			<View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+			<View style={styles.separator2} lightColor="grey" darkColor="grey" />
 			<Bouton text="Create a Matchikal" test={() => createSession()} />
+      <View style={styles.separator} lightColor="grey" darkColor="grey" />
 			<TextInput
 				style={{
-					height: 80,
-					width: '70%',
-					borderColor: 'gray',
+					height: 50,
+					width: 243,
+					borderColor: 'grey',
 					borderWidth: 1,
-					color: 'white',
-					fontSize: 20
+					color: 'black',
+					fontSize: 20,
+          borderRadius: 30,
+          paddingLeft: 10,
+          marginTop: 30,
+          
+          
 				}}
 				onChangeText={(input) => setSessionID(input)}
 				placeholder="Enter the Session ID"
@@ -113,18 +120,26 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
-		backgroundColor: Colors.dark_violet,
+		backgroundColor: Colors.light.background,
 	},
 	title: {
-		fontSize: 25,
+		fontSize: 50,
 		fontWeight: 'bold',
-		color: Colors.dark.text,
+		color: Colors.light.text,
+    marginVertical:10,
 
 	},
 	separator: {
-		marginVertical: 30,
+		marginVertical: 0,
 		height: 1,
 		width: '80%',
+		color: "grey",
+
+	},
+  separator2: {
+		marginVertical: 0,
+		height: 1,
+		width: '50%',
 		color: Colors.dark_violet,
 
 	},

@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { Pressable } from 'react-native';
+import { Image, Pressable } from 'react-native';
 
 import Colors from '../constants/Colors';
 import LoginScreen from '../screens/LoginScreen';
@@ -34,6 +34,7 @@ export default function Navigation() {
 	};
 	return (
 		<NavigationContainer
+
 			linking={LinkingConfiguration}
 			// theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
 			theme={MyTheme}
@@ -109,7 +110,19 @@ function BottomTabNavigator() {
 									style={{ marginRight: 15 }} />}
 						</Pressable>
 					),
-				})}
+					headerLeft: () => (
+						<Pressable
+							onPress={() => {
+								navigation.navigate('Accueil');
+							}}
+							style={({ pressed }) => ({
+								opacity: pressed ? 0.5 : 1,
+							})}>
+								<Image source={{uri:"matchikal\client\assets\images\image-removebg-preview.png"}}></Image>
+	
+
+							</Pressable>
+		),	})}
 			/>
 			<BottomTab.Screen
 				name="TabTwo"

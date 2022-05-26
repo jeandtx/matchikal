@@ -22,6 +22,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         fontSize: 20,
         marginVertical: 20,
+        hover : {
+            backgroundColor: Colors.dark_violet,
+            color: Colors.dark.text,
+            borderRadius: 80,
+        },
+        
     },
 
 });
