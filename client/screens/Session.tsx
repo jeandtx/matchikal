@@ -8,7 +8,88 @@ import { RootStackScreenProps } from '../types';
 import axios from 'axios';
 
 
+
+
 export default function Session({ navigation }: RootStackScreenProps<'Session'>) {
+
+	let array: Array<Object> = [];
+	function getSongs(next: string) {
+		console.log("getSongs");
+		if (window.localStorage.getItem("token") != null) {
+			axios({
+				method: "get",
+				url: next == "" ? "https://api.spotify.com/v1/me/tracks" : next,
+				headers: {
+					Authorization:
+						"Bearer " + window.localStorage.getItem("token"),
+				},
+			}).then((response) => {
+				array.push(...response.data.items);
+				if (response.data.next) {
+					getSongs(response.data.next);
+				} else {
+					console.log(array);
+					filterData(array);
+					return array;
+				}
+			});
+		} else {
+			console.log("User is not connected");
+		}
+	}
+
+	function filterData(array: any) {
+		let newArray: Array<Array<string>> = [];
+		for (let index = 0; index < array.length; index++) {
+			newArray.push([]);
+			newArray[index].push(array[index].track.artists[0].name);
+			newArray[index].push(array[index].track.name);
+			newArray[index].push(array[index].track.popularity);
+			newArray[index].push(array[index].added_at);
+		}
+		console.log(newArray);
+	
+		return newArray;
+	}
+	
+	function ArrayArtistComparaison(a1: Array<string>, a2: Array<string>) {
+		let cpt1 = 0;
+		let cpt2 = 0;
+		let checkcpt1 = 0;
+		let checkpt2 = 0;
+	
+		let checkList = [];
+		let checkList2 = [];
+	
+		for (let i1 = 0; i1 < a1.length; i1++) {
+			if (checkList.indexOf(a1[i1][0]) != -1) {
+				checkcpt1++;
+	
+				continue;
+			}
+			checkList[i1 - checkcpt1] = a1[i1][0];
+	
+			for (let i2 = 0; i2 < a2.length; i2++) {
+				if (a1[i1][0] == a2[i2][0]) {
+					cpt2++;
+				}
+			}
+		}
+		for (let i1 = 0; i1 < a2.length; i1++) {
+			if (checkList2.indexOf(a2[i1][0]) != -1) {
+				checkpt2++;
+				continue;
+			}
+			checkList2[i1 - checkpt2] = a2[i1][0];
+			for (let i2 = 0; i2 < a1.length; i2++) {
+				if (a2[i1][0] == a1[i2][0]) {
+					cpt1++;
+				}
+			}
+		}
+		return 100 * ((cpt1 / a1.length + cpt2 / a2.length) / 2);
+	}
+
 	const DATA = [
 		{
 			user_name: 'Freeze Corleone',
@@ -40,7 +121,7 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 
 			spot_user_name: 'Jean DTX',
 			spot_user_image: 'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTssjb3qfVuEAJEU4wXmQcBDruj2nNCG-FozpRmRSqqas92aG2thRbDeEAtVG94',
-			spot_user_pourcentage: ,
+			spot_user_pourcentage: '68%',
 
 		},
 		{
