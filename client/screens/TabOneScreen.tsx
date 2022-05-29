@@ -2,6 +2,8 @@ import { Image, StyleSheet, TextInput } from 'react-native';
 import Bouton from '../components/Bouton';
 import { Text, View } from '../components/Themed';
 import Colors from '../constants/Colors';
+import ConfettiCannon from 'react-native-confetti-cannon';
+
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { RootStackScreenProps } from '../types';
@@ -79,8 +81,9 @@ export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'
 	}
 
 	return (
+
 		<View style={styles.container}> 
-      <Image source={require('../assets/images/image-removebg-preview.png')} />
+      		<Image source={require('../assets/images/image-removebg-preview.png')} />
 			<Text style={styles.title}>MATCHIKAL</Text>
 			<View style={styles.separator2} lightColor="grey" darkColor="grey" />
 			<Bouton text="Create a Matchikal" test={() => createSession()} />
@@ -104,6 +107,7 @@ export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'
 				value={sessionID}
 			/>
 			<Bouton text="Join a Mathcikal" test={() => joinSession()} />
+			<ConfettiCannon count={100} origin={{x: 0, y: 0}} />
 		</View>
 	);
 }

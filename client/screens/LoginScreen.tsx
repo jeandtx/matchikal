@@ -13,6 +13,7 @@ export default function Screen() {
 
 	const clientId = 'c88084532ac7492fb07e36ac80eca03d';
 	const clientSecret = '3adc79bbf0154a88a6b1174ade9337d9';
+
 	var redirect_uri = "http://localhost:19006"; //change to your host link
 
 	function requestAuthorization() {
