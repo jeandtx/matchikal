@@ -3,6 +3,7 @@ import { Text, View } from '../components/Themed';
 import React, { useEffect } from 'react';
 import Feed from '../components/Feed';
 import SessionCard from '../components/SessionCard';
+// import Song from '../components/Song';
 import Bouton from '../components/Bouton';
 import { RootStackScreenProps } from '../types';
 import axios from 'axios';
@@ -13,6 +14,8 @@ import axios from 'axios';
 export default function Session({ navigation }: RootStackScreenProps<'Session'>) {
 
 	let array: Array<Object> = [];
+	const [data, setData] = React.useState(array);
+
 	function getSongs(next: string) {
 		console.log("getSongs");
 		if (window.localStorage.getItem("token") != null) {
@@ -28,8 +31,8 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 				if (response.data.next) {
 					getSongs(response.data.next);
 				} else {
+					array = filterData(array);
 					console.log(array);
-					filterData(array);
 					return array;
 				}
 			});
@@ -46,29 +49,43 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 			newArray[index].push(array[index].track.name);
 			newArray[index].push(array[index].track.popularity);
 			newArray[index].push(array[index].added_at);
+			newArray[index].push(array[index].track.album.images[0].url);
+
 		}
 		console.log(newArray);
-	
+		setData(newArray);
 		return newArray;
 	}
-	
+
+	function displayPlaylist(array: any) {
+		return array.map((song: any) => {
+			return (
+				<tr>
+					<td>
+						<Feed user_name={song[0]} user_image={song[4]} song_name={song[1]} />
+					</td>
+				</tr>
+			)
+		});
+	}
+
 	function ArrayArtistComparaison(a1: Array<string>, a2: Array<string>) {
 		let cpt1 = 0;
 		let cpt2 = 0;
 		let checkcpt1 = 0;
 		let checkpt2 = 0;
-	
+
 		let checkList = [];
 		let checkList2 = [];
-	
+
 		for (let i1 = 0; i1 < a1.length; i1++) {
 			if (checkList.indexOf(a1[i1][0]) != -1) {
 				checkcpt1++;
-	
+
 				continue;
 			}
 			checkList[i1 - checkcpt1] = a1[i1][0];
-	
+
 			for (let i2 = 0; i2 < a2.length; i2++) {
 				if (a1[i1][0] == a2[i2][0]) {
 					cpt2++;
@@ -144,6 +161,9 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 		const id = window.localStorage.getItem('session') || 'No session';
 		console.log('sessionID', id);
 		setSessionID(id);
+
+		let a: any = getSongs("");
+		console.log(a);
 	}, []);
 
 	function leaveSession() {
@@ -179,23 +199,30 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 				</View>
 				<View style={styles.cardSessionBody}>
 					<SessionCard spot_user_name={DATA_SESION[0].spot_user_name} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={DATA_SESION[0].spot_user_pourcentage} />
-					
-					
-					<SessionCard spot_user_name={DATA_SESION[1].spot_user_name} spot_user_image={DATA_SESION[1].spot_user_image} spot_user_pourcentage={DATA_SESION[1].spot_user_pourcentage} />
-					
-					<SessionCard spot_user_name={DATA_SESION[2].spot_user_name} spot_user_image={DATA_SESION[2].spot_user_image} spot_user_pourcentage={DATA_SESION[2].spot_user_pourcentage} />
-					
 				</View>
 			</View>
+
 			<View style={styles.cardSong}>
-				
-				<Feed user_name={DATA[0].user_name} user_image={DATA[0].user_image} song_name={DATA[0].song_name}
-				/>
-				<Feed user_name={DATA[1].user_name} user_image={DATA[1].user_image} song_name={DATA[1].song_name}
-				/>
-				<Feed user_name={DATA[2].user_name} user_image={DATA[2].user_image} song_name={DATA[2].song_name}
-				/>
+				<table  >
+					<thead>
+						<tr>
+							<th >My playlist</th>
+						</tr>
+					</thead>
+					<tbody id='table'>
+						<tr>
+							<td>
+								<Feed user_name={DATA[0].user_name} user_image={DATA[0].user_image} song_name={DATA[0].song_name} />
+							</td>
+						</tr>
+						{displayPlaylist(data)}
+					</tbody>
+
+				</table>
+
+
 			</View>
+
 			<Bouton text='Leave Session' test={() => {
 				console.log('Leaving the session ' + sessionID);
 				leaveSession();
