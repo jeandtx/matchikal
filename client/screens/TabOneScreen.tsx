@@ -7,10 +7,15 @@ import ConfettiCannon from 'react-native-confetti-cannon';
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { RootStackScreenProps } from '../types';
+import io from 'socket.io-client';
+const socket = io('http://localhost:19007');
 
 export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'>) {
 
-	const [sessionID, setSessionID] = React.useState('');
+	function sendName() {
+		let MyName = window.localStorage.getItem('display_name') + '';
+		socket.emit('message', { name: MyName });
+	}
 
 	useEffect(() => {
 		const hash = window.location.hash;
@@ -31,83 +36,19 @@ export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'
 				window.localStorage.removeItem('token');
 			})
 		}
-		if (window.localStorage.getItem('session')) {
-			navigation.replace('Session');
-		}
 	}, []);
-
-	function createSession() {
-		if (!window.localStorage.getItem('token')) {
-			navigation.navigate('Login');
-		} else {
-			axios({
-				method: 'get',
-				url: 'http://localhost:8080/api/v1/sessions/user/' + window.localStorage.getItem('id'),
-			})
-				.then((res: any) => {
-					console.log('Session : ' + res.data._id);
-					window.localStorage.setItem('session', res.data._id);
-					navigation.replace('Session');
-				})
-				.catch((err) => {
-					axios({
-						method: 'post',
-						url: 'http://localhost:8080/api/v1/sessions',
-						data: {
-							'creator': window.localStorage.getItem('id'),
-							'connected': window.localStorage.getItem('display_name')
-						},
-					}).then(response => {
-						console.log("Created session for user " + window.localStorage.getItem('display_name'));
-						createSession();
-					}).catch(error => {
-						console.log(error);
-					});
-				});
-		}
-	}
-
-	function joinSession() {
-		axios({
-			method: 'get',
-			url: 'http://localhost:8080/api/v1/sessions/id/' + sessionID,
-		}).then(response => {
-			console.log("Joined session " + response.data._id);
-			window.localStorage.setItem('session', response.data._id);
-			navigation.replace('Session');
-		}).catch(() => {
-			console.log("Session not found");
-		});
-	}
 
 	return (
 
-		<View style={styles.container}> 
-      		<Image source={require('../assets/images/image-removebg-preview.png')} />
+		<View style={styles.container}>
+			<Image source={require('../assets/images/image-removebg-preview.png')} />
 			<Text style={styles.title}>MATCHIKAL</Text>
 			<View style={styles.separator2} lightColor="grey" darkColor="grey" />
-			<Bouton text="Create a Matchikal" test={() => createSession()} />
-      <View style={styles.separator} lightColor="grey" darkColor="grey" />
-			<TextInput
-				style={{
-					height: 50,
-					width: 243,
-					borderColor: 'grey',
-					borderWidth: 1,
-					color: 'black',
-					fontSize: 20,
-          borderRadius: 30,
-          paddingLeft: 10,
-          marginTop: 30,
-          
-          
-				}}
-				onChangeText={(input) => setSessionID(input)}
-				placeholder="Enter the Session ID"
-				value={sessionID}
-			/>
-			<Bouton text="Join a Mathcikal" test={() => joinSession()} />
-			<ConfettiCannon count={100} origin={{x: 0, y: 0}} />
+			<Bouton text="Create a Matchikal" test={() => {
+				navigation.replace('Session');
+				sendName();
+			}} />
+			<ConfettiCannon count={100} origin={{ x: 0, y: 0 }} />
 		</View>
 	);
 }
@@ -130,7 +71,7 @@ const styles = StyleSheet.create({
 		fontSize: 50,
 		fontWeight: 'bold',
 		color: Colors.light.text,
-    marginVertical:10,
+		marginVertical: 10,
 
 	},
 	separator: {
@@ -140,7 +81,7 @@ const styles = StyleSheet.create({
 		color: "grey",
 
 	},
-  separator2: {
+	separator2: {
 		marginVertical: 0,
 		height: 1,
 		width: '50%',

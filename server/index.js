@@ -14,6 +14,17 @@ const io = new Server(server, {
     },
 });
 
+io.on("connection", (socket) => {
+    console.log(`New user connected ${socket.id}`);
+
+    socket.on("message", (data) => {
+        console.log("message: ");
+        console.log(data);
+
+        socket.broadcast.emit("receive", data);
+    })
+
+})
 
 server.listen(19007, () => {
     console.log('Server is running on port 19007');

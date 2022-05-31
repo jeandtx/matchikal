@@ -3,14 +3,25 @@ import { StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
 import io from 'socket.io-client';
+import { useEffect, useState } from 'react';
 
 const socket = io('http://localhost:19007');
 
 export default function NotFoundScreen({ navigation }: RootStackScreenProps<'NotFound'>) {
 
-	function sendMessage() {
-		socket.emit('message', 'Hello from the client');
+	function sendMessage(msg: string) {
+		msg = window.localStorage.getItem('display_name') + ': ' + msg;
+		socket.emit('message', { message: msg });
 	}
+
+	const [message, setMessage] = useState('');
+
+	useEffect(() => {
+		socket.on('receive', (data) => {
+			console.log(data.message);
+
+		});
+	}, [socket]);
 
 	return (
 		<View style={styles.container}>
@@ -24,8 +35,10 @@ export default function NotFoundScreen({ navigation }: RootStackScreenProps<'Not
 					backgroundColor: '#fff',
 					padding: 10,
 				}}
-				placeholder="Message ..." />
-			<TouchableOpacity onPress={() => sendMessage()} style={styles.link}>
+				placeholder="Message ..."
+				onChange={(e) => setMessage(e.nativeEvent.text)}
+			/>
+			<TouchableOpacity onPress={() => sendMessage(message)} style={styles.link}>
 				<Text style={styles.linkText}>Send Message</Text>
 			</TouchableOpacity>
 
