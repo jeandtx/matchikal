@@ -1,30 +1,21 @@
-import app from "./app.js"
-import mongodb from "mongodb"
-import dotenv from "dotenv"
-import ProfilesDAO from "./dao/profilesDAO.js"
-import SessionsDAO from "./dao/sessionsDAO.js"
+const express = require('express');
+const app = express();
+const http = require('http');
+const { Server } = require("socket.io");
+const cors = require('cors');
 
-dotenv.config()
-const MongoClient = mongodb.MongoClient
+app.use(cors());
 
-const port = process.env.PORT || 8000
+const server = http.createServer(app);
 
-MongoClient.connect(
-    process.env.RESTREVIEWS_DB_URI,
-    {
-        maxPoolSize: 50,
-        wtimeoutMS: 2500,
-        useNewUrlParser: true
-    }
-)
-    .catch(err => {
-        console.error(err.stack)
-        process.exit(1)
-    })
-    .then(async client => {
-        await ProfilesDAO.injectDB(client)
-        await SessionsDAO.injectDB(client)
-        app.listen(port, () => {
-            console.log(`listening on port ${port}`)
-        })
-    })
+const io = new Server(server, {
+    cors: {
+        origin: 'http://localhost:19006/',
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    },
+});
+
+
+server.listen(19007, () => {
+    console.log('Server is running on port 19007');
+});
