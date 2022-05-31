@@ -44,6 +44,18 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 		}
 	}
 
+	function sendName() {
+		let date = new Date();
+		let time = date.getTime();
+		let MyName = window.localStorage.getItem('display_name') + '';
+		MyName = MyName + time;
+		socket.emit('message', { name: MyName });
+	}
+
+	useEffect(() => {
+		sendName();
+		console.log("useEffect");
+	}, []);
 
 	useEffect(() => {
 		getSongs("");
@@ -54,15 +66,18 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 			setName(userNamesArray);
 			console.log(userNamesArray);
 		});
-	}, [socket,]);
+	}, [socket]);
 
 	function displayAllUsers(array: Array<string>) {
 		return array.map((name) => {
-			return (<SessionCard spot_user_name={name} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={"100%"} />)
+			return (
+				<div key={name}>
+					<SessionCard spot_user_name={name} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={"100%"} />
+				</div>
+			);
 		})
-
-
 	}
+
 
 	function filterData(array: any) {
 		let newArray: Array<Array<string>> = [];

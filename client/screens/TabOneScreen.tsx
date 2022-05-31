@@ -7,15 +7,8 @@ import ConfettiCannon from 'react-native-confetti-cannon';
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { RootStackScreenProps } from '../types';
-import io from 'socket.io-client';
-const socket = io('http://localhost:19007');
 
 export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'>) {
-
-	function sendName() {
-		let MyName = window.localStorage.getItem('display_name') + '';
-		socket.emit('message', { name: MyName });
-	}
 
 	useEffect(() => {
 		const hash = window.location.hash;
@@ -46,7 +39,6 @@ export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'
 			<View style={styles.separator2} lightColor="grey" darkColor="grey" />
 			<Bouton text="Create a Matchikal" test={() => {
 				navigation.replace('Session');
-				sendName();
 			}} />
 			<ConfettiCannon count={100} origin={{ x: 0, y: 0 }} />
 		</View>
