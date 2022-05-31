@@ -31,6 +31,7 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 				if (response.data.next) {
 					getSongs(response.data.next);
 				} else {
+					console.log(array);
 					array = filterData(array);
 					console.log(array);
 					return array;
@@ -50,11 +51,48 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 			newArray[index].push(array[index].track.popularity);
 			newArray[index].push(array[index].added_at);
 			newArray[index].push(array[index].track.album.images[0].url);
+			newArray[index].push(array[index].track.album.name);
+			newArray[index].push(array[index].track.external_urls.spotify);
+			
 
 		}
 		console.log(newArray);
 		setData(newArray);
 		return newArray;
+
+	}
+	function displayUser1() {
+		//get display_name
+		let display_name = window.localStorage.getItem("display_name");
+		console.log(display_name);
+		//stringify
+		let display_name_string = JSON.stringify(display_name);
+		
+
+
+		return <SessionCard spot_user_name={display_name_string} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={"100%"} />;
+	}
+
+	function displayUser(){
+		if (window.localStorage.getItem("token") != null) {
+			axios({
+				method: "get",
+				url: "https://api.spotify.com/v1/me",
+				headers: {
+					Authorization:
+						"Bearer " + window.localStorage.getItem("token"),
+				},
+			}).then((response) => {
+				console.log("User is connected");
+				console.log(response.data.display_name);
+				//return a string
+				return( 
+					<SessionCard spot_user_name={DATA_SESION[0].spot_user_name} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={DATA_SESION[0].spot_user_pourcentage} />
+				)
+			});
+		} else {
+			console.log("User is not connected");
+		} 
 	}
 
 	function displayPlaylist(array: any) {
@@ -62,7 +100,7 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 			return (
 				<tr>
 					<td>
-						<Feed user_name={song[0]} user_image={song[4]} song_name={song[1]} />
+						<Feed user_name={song[0]} user_image={song[4]} song_name={song[1]} album_name={song[5]} song_url={song[6]}/>
 					</td>
 				</tr>
 			)
@@ -195,10 +233,13 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 		<View style={styles.container}>
 			<View style={styles.cardSession}>
 				<View>
+					
 					<Text style={styles.sessionID}>Session: {sessionID} </Text>
 				</View>
 				<View style={styles.cardSessionBody}>
-					<SessionCard spot_user_name={DATA_SESION[0].spot_user_name} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={DATA_SESION[0].spot_user_pourcentage} />
+					{displayUser1()}
+					
+					
 				</View>
 			</View>
 
@@ -206,15 +247,11 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 				<table  >
 					<thead>
 						<tr>
-							<th >My playlist</th>
+							<th >My playlist </th>
 						</tr>
 					</thead>
 					<tbody id='table'>
-						<tr>
-							<td>
-								<Feed user_name={DATA[0].user_name} user_image={DATA[0].user_image} song_name={DATA[0].song_name} />
-							</td>
-						</tr>
+						
 						{displayPlaylist(data)}
 					</tbody>
 
