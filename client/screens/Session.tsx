@@ -10,7 +10,6 @@ import io from 'socket.io-client';
 
 const socket = io('http://localhost:19007');
 
-
 export default function Session({ navigation }: RootStackScreenProps<'Session'>) {
 
 	let array: Array<Object> = [];
@@ -19,7 +18,6 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 	let a = window.localStorage.getItem('display_name') + '';
 	let userNamesArray: Array<string> = [a];
 	const [name, setName] = useState(userNamesArray);
-
 
 	function getSongs(next: string) {
 		if (window.localStorage.getItem("token") != null) {
@@ -47,37 +45,55 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 	function sendName() {
 		let date = new Date();
 		let time = date.getTime();
-		let MyName = window.localStorage.getItem('display_name') + '';
-		MyName = MyName + time;
+		let MyName = window.localStorage.getItem('display_name') + '        c';
+		// MyName = MyName + time;
 		socket.emit('message', { name: MyName });
 	}
 
+	function getNames() {
+		console.log(name)
+	}
+
 	useEffect(() => {
+
 		sendName();
-		console.log("useEffect");
+		socket.emit('whosthere', { name: name });
+		socket.on("whosthere", (data) => {
+			console.log(data);
+			console.log(name + "Moi je suis la ");
+		});
 	}, []);
 
 	useEffect(() => {
 		getSongs("");
-
 		socket.on('receive', (data) => {
-			console.log(data.name);
-			userNamesArray.push(data.name);
-			setName(userNamesArray);
-			console.log(userNamesArray);
+			data.name.forEach((element: any) => {
+				console.log(element);
+				if ((userNamesArray.includes(element)) != true) {
+					userNamesArray.push(element);
+					setName([...userNamesArray]);
+				}
+			});
+			console.log(name);
+		});
+
+		socket.on("whosthere", (data) => {
+			console.log(data);
+			console.log(name + "Moi je suis la ");
+			socket.emit('message', { name: name });
 		});
 	}, [socket]);
 
 	function displayAllUsers(array: Array<string>) {
+		console.log(array);
 		return array.map((name) => {
 			return (
-				<div key={name}>
+				<div id='caca'>
 					<SessionCard spot_user_name={name} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={"100%"} />
 				</div>
 			);
 		})
 	}
-
 
 	function filterData(array: any) {
 		let newArray: Array<Array<string>> = [];
@@ -93,11 +109,6 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 		}
 		setData(newArray);
 		return newArray;
-	}
-
-	function displayUser1() {
-		let display_name = window.localStorage.getItem('display_name') + '';
-		return (<SessionCard spot_user_name={display_name} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={"100%"} />);
 	}
 
 	function displayPlaylist(array: any) {
@@ -179,7 +190,13 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 					<Text style={styles.sessionID}>Session: </Text>
 				</View>
 				<View style={styles.cardSessionBody}>
-					{displayAllUsers(name)}
+					{name.map((name) => {
+						return (
+							<div >
+								<SessionCard spot_user_name={name} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={"100%"} />
+							</div>
+						);
+					})}
 				</View>
 			</View>
 			<Bouton text='Leave Session' test={() => {
@@ -203,7 +220,6 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 		</View >
 	);
 }
-
 
 const styles = StyleSheet.create({
 	container: {

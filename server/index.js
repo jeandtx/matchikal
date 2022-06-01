@@ -24,6 +24,12 @@ io.on("connection", (socket) => {
         socket.broadcast.emit("receive", data);
     })
 
+    socket.on("whosthere", (data) => {
+        console.log("checking whosthere");
+
+        socket.broadcast.emit("whosthere", data);
+    })
+
 })
 
 server.listen(19007, () => {
