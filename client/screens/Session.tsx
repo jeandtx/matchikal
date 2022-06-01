@@ -15,9 +15,12 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 	let array: Array<Object> = [];
 	const [data, setData] = useState(array);
 
+
 	let a = window.localStorage.getItem('display_name') + '';
-	let userNamesArray: Array<string> = [a];
+	let userNamesArray: any = [{ userName: a, playlist: data }];
 	const [name, setName] = useState(userNamesArray);
+
+
 
 	function getSongs(next: string) {
 		if (window.localStorage.getItem("token") != null) {
@@ -45,7 +48,7 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 	function sendName() {
 		let date = new Date();
 		let time = date.getTime();
-		let MyName = window.localStorage.getItem('display_name') + '        c';
+		let MyName = window.localStorage.getItem('display_name') + '';
 		// MyName = MyName + time;
 		socket.emit('message', { name: MyName });
 	}
@@ -86,10 +89,10 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 
 	function displayAllUsers(array: Array<string>) {
 		console.log(array);
-		return array.map((name) => {
+		return array.map((name: any) => {
 			return (
 				<div id='caca'>
-					<SessionCard spot_user_name={name} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={"100%"} />
+					<SessionCard spot_user_name={name.userName} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={"100%"} />
 				</div>
 			);
 		})
@@ -108,6 +111,9 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 			newArray[index].push(array[index].track.external_urls.spotify);
 		}
 		setData(newArray);
+		userNamesArray[0].playlist = newArray;
+		setName(userNamesArray);
+		console.log(name);
 		return newArray;
 	}
 
@@ -190,10 +196,10 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 					<Text style={styles.sessionID}>Session: </Text>
 				</View>
 				<View style={styles.cardSessionBody}>
-					{name.map((name) => {
+					{name.map((name: any) => {
 						return (
 							<div >
-								<SessionCard spot_user_name={name} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={"100%"} />
+								<SessionCard spot_user_name={name.userName} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={"100%"} />
 							</div>
 						);
 					})}
@@ -212,6 +218,7 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 					</thead>
 					<tbody id='table'>
 						{displayPlaylist(data)}
+						text {console.log("text", data)}
 					</tbody>
 
 				</table>
