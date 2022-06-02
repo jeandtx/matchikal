@@ -28,6 +28,8 @@ export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'
 			}).catch(() => {
 				window.localStorage.removeItem('token');
 			})
+		} else {
+			localStorage.clear();
 		}
 	}, []);
 

@@ -71,13 +71,18 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 		getSongs("");
 		socket.on('receive', (data) => {
 			data.name.forEach((element: any) => {
-				console.log(element);
-				if ((userNamesArray.includes(element)) != true) {
-					userNamesArray.push(element);
-					setName([...userNamesArray]);
+				console.log("element", element);
+				for (let i = 0; i < userNamesArray.length; i++) {
+					if (userNamesArray[i].userName != element.userName) {
+						console.log("Is this equel", userNamesArray[i].userName, element.userName);
+						userNamesArray.push(element);
+						setName([...userNamesArray]);
+					} else {
+						break;
+					}
 				}
 			});
-			console.log(name);
+			console.log("name", name);
 		});
 
 		socket.on("whosthere", (data) => {
