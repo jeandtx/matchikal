@@ -20,6 +20,9 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 	let userNamesArray: any = [{ userName: a, playlist: data }];
 	const [name, setName] = useState(userNamesArray);
 
+	const [playlist, setPlaylist] = useState([]);
+
+
 
 
 	function getSongs(next: string) {
@@ -41,7 +44,7 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 				}
 			});
 		} else {
-			console.log("User is not connected");
+			// console.log("User is not connected");
 		}
 	}
 
@@ -54,7 +57,7 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 	}
 
 	function getNames() {
-		console.log(name)
+		// console.log(name)
 	}
 
 	useEffect(() => {
@@ -62,41 +65,50 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 		sendName();
 		socket.emit('whosthere', { name: name });
 		socket.on("whosthere", (data) => {
-			console.log(data);
-			console.log(name + "Moi je suis la ");
+			// console.log(data);
+			// console.log(name + "Moi je suis la ");
 		});
 	}, []);
 
 	useEffect(() => {
 		getSongs("");
 		socket.on('receive', (data) => {
-			data.name.forEach((element: any) => {
-				console.log("element", element);
-				for (let i = 0; i < userNamesArray.length; i++) {
-					if (userNamesArray[i].userName != element.userName) {
-						console.log("Is this equel", userNamesArray[i].userName, element.userName);
-						userNamesArray.push(element);
-						setName([...userNamesArray]);
-					} else {
-						break;
+			try {
+
+				data.name.forEach((element: any) => {
+					// console.log("element", element);
+					for (let i = 0; i < userNamesArray.length; i++) {
+						if (userNamesArray[i].userName != element.userName) {
+							// console.log("Is this equel", userNamesArray[i].userName, element.userName);
+							userNamesArray.push(element);
+							setName([...userNamesArray]);
+						} else {
+							break;
+						}
 					}
+					// console.log(userNamesArray);
+				});
+				displayInfos(name);
+				// console.log("name", name);
+			} catch (error) {
+				if (error instanceof TypeError) {
+					console.log("TypeError");
 				}
-			});
-			console.log("name", name);
+			}
 		});
 
 		socket.on("whosthere", (data) => {
-			console.log(data);
-			console.log(name + "Moi je suis la ");
+			// console.log(data);
+			// console.log(name + "Moi je suis la ");
 			socket.emit('message', { name: name });
 		});
 	}, [socket]);
 
 	function displayAllUsers(array: Array<string>) {
-		console.log(array);
+		// console.log(array);
 		return array.map((name: any) => {
 			return (
-				<div id='caca'>
+				<div key={name}>
 					<SessionCard spot_user_name={name.userName} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={"100%"} />
 				</div>
 			);
@@ -118,11 +130,20 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 		setData(newArray);
 		userNamesArray[0].playlist = newArray;
 		setName(userNamesArray);
-		console.log(name);
+		// console.log(name);
 		return newArray;
 	}
+	function displayInfos(arrayObj: Array<any>) {
+		for (let index = 0; index < arrayObj.length; index++) {
+			setPlaylist(arrayObj[index].playlist);
+		}
+	}
+
+
 
 	function displayPlaylist(array: any) {
+		// console.log("this is what i want", array);
+
 		return array.map((song: any) => {
 			return (
 				<tr key={song} >
@@ -169,7 +190,8 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 				}
 			}
 		}
-		return 100 * ((cpt1 / a1.length + cpt2 / a2.length) / 2);
+
+		return Math.ceil(100 * ((cpt1 / a1.length + cpt2 / a2.length) / 2) * 100) / 100;
 	}
 
 	const DATA_SESION = [
@@ -203,15 +225,15 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 				<View style={styles.cardSessionBody}>
 					{name.map((name: any) => {
 						return (
-							<div >
-								<SessionCard spot_user_name={name.userName} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={"100%"} />
+							<div key={name} >
+								<SessionCard spot_user_name={name.userName} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={ArrayArtistComparaison(playlist, name.playlist) + "%"} />
 							</div>
 						);
 					})}
 				</View>
 			</View>
 			<Bouton text='Leave Session' test={() => {
-				console.log('Leaving the session ');
+				// console.log('Leaving the session ');
 				navigation.replace('Root');
 			}} />
 			<View style={styles.cardSong}>
@@ -222,17 +244,29 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 						</tr>
 					</thead>
 					<tbody id='table'>
-						{displayPlaylist(data)}
-						text {console.log("text", data)}
-					</tbody>
+						{
+							displayPlaylist(data)
+						}
+						{
 
+							playlist.map((song: any) => {
+								return (
+									<tr key={song} >
+										<td>
+											<Feed user_name={song[0]} user_image={song[4]} song_name={song[1]} album_name={song[5]} song_url={song[6]} />
+										</td>
+									</tr>
+								)
+							})
+						}
+					</tbody>
 				</table>
 			</View>
 
 		</View >
 	);
-}
 
+}
 const styles = StyleSheet.create({
 	container: {
 		backgroundColor: '#0a0345',
