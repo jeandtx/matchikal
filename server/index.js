@@ -1,30 +1,37 @@
-import app from "./app.js"
-import mongodb from "mongodb"
-import dotenv from "dotenv"
-import ProfilesDAO from "./dao/profilesDAO.js"
-import SessionsDAO from "./dao/sessionsDAO.js"
+const express = require('express');
+const app = express();
+const http = require('http');
+const { Server } = require("socket.io");
+const cors = require('cors');
 
-dotenv.config()
-const MongoClient = mongodb.MongoClient
+app.use(cors());
 
-const port = process.env.PORT || 8000
+const server = http.createServer(app);
 
-MongoClient.connect(
-    process.env.RESTREVIEWS_DB_URI,
-    {
-        maxPoolSize: 50,
-        wtimeoutMS: 2500,
-        useNewUrlParser: true
-    }
-)
-    .catch(err => {
-        console.error(err.stack)
-        process.exit(1)
+const io = new Server(server, {
+    cors: {
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    },
+});
+
+io.on("connection", (socket) => {
+    console.log(`New user connected ${socket.id}`);
+
+    socket.on("message", (data) => {
+        console.log("message: ");
+        console.log(data);
+
+        socket.broadcast.emit("receive", data);
     })
-    .then(async client => {
-        await ProfilesDAO.injectDB(client)
-        await SessionsDAO.injectDB(client)
-        app.listen(port, () => {
-            console.log(`listening on port ${port}`)
-        })
+
+    socket.on("whosthere", (data) => {
+        console.log("checking whosthere");
+
+        socket.broadcast.emit("whosthere", data);
     })
+
+})
+
+server.listen(19007, () => {
+    console.log('Server is running on port 19007');
+});
