@@ -16,7 +16,9 @@ export default function SessionCard({ spot_user_name, spot_user_image, spot_user
                     />
                 </View>
                 <View style={styles.spotUserName}>
-                    <Text style={styles.spotUserName}> {spot_user_name} </Text>
+                    <a href="https://open.spotify.com/" target="blank">
+                       <Text style={styles.spotUserName}> {spot_user_name} </Text>
+                    </a>
                     <Text style={styles.spotUserPourcentage}> {spot_user_pourcentage} </Text>
                 </View>
             </View>

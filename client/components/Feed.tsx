@@ -35,6 +35,7 @@ export default function Feed({ user_name, user_image, song_name, album_name, son
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        
     },
     card: {
         backgroundColor: 'white',

@@ -34,16 +34,25 @@ export default function TabOneScreen({ navigation }: RootStackScreenProps<'Root'
 	}, []);
 
 	return (
+		
+			
 
-		<View style={styles.container}>
-			<Image source={require('../assets/images/image-removebg-preview.png')} />
-			<Text style={styles.title}>MATCHIKAL</Text>
-			<View style={styles.separator2} lightColor="grey" darkColor="grey" />
-			<Bouton text="Create a Matchikal" test={() => {
-				navigation.replace('Session');
-			}} />
-			<ConfettiCannon count={100} origin={{ x: 0, y: 0 }} />
-		</View>
+			
+				
+				<View style={styles.container}>
+					<Image
+										source={require('../assets/images/logo_noir_00000.png')}
+										style={{ width: 400, height: 223, marginLeft: 10,shadowOpacity : 0 }}
+										/>
+					
+					
+					<View style={styles.separator2} lightColor="grey" darkColor="grey" />
+					<Bouton text="Create a Matchikal" test={() => {
+						navigation.replace('Session');
+					}} />
+					<ConfettiCannon count={100} origin={{ x: 0, y: 0 }} />
+				</View>
+			
 	);
 }
 
@@ -58,14 +67,35 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		alignItems: 'center',
-		justifyContent: 'center',
+		paddingTop:100,
+		backgroundColor: Colors.light.background,
+		display 	: 'flex',
+		
+		backgroundImage: `url(${require('../assets/images/background_white_music.jpg')})`,
+		backgroundSize: 'cover',
+		backgroundPosition: 'center',
+		
+		//shift the background image down by the amount of pixels specified
+
+		backgroundRepeat: 'no-repeat',
+		background : "linear-gradient(to bottom, rgba(255,255,255,0.5) 0%, rgba(255,255,255,1) 100%)",
+		//reduce the opacity of the background image
+		
+
+		
+	},
+	container1: {
+		flex: 1,
+		alignItems: 'center',
+		
 		backgroundColor: Colors.light.background,
 	},
 	title: {
 		fontSize: 50,
 		fontWeight: 'bold',
 		color: Colors.light.text,
-		marginVertical: 10,
+		marginVertical: 0,
+
 
 	},
 	separator: {

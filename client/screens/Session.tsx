@@ -7,6 +7,7 @@ import Bouton from '../components/Bouton';
 import { RootStackScreenProps } from '../types';
 import axios from 'axios';
 import io from 'socket.io-client';
+import math from 'mathjs';
 
 const socket = io('http://localhost:19007');
 
@@ -109,7 +110,7 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 		return array.map((name: any) => {
 			return (
 				<div key={name}>
-					<SessionCard spot_user_name={name.userName} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={"100%"} />
+					<SessionCard spot_user_name={name.userName} spot_user_image={DATA_SESION[2].spot_user_image} spot_user_pourcentage={"100%"} />
 				</div>
 			);
 		})
@@ -193,6 +194,11 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 
 		return Math.ceil(100 * ((cpt1 / a1.length + cpt2 / a2.length) / 2) * 100) / 100;
 	}
+	function getRandomIntInclusive(min : any, max : any) {
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min +1)) + min;
+	  }
 
 	const DATA_SESION = [
 		{
@@ -215,6 +221,7 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 
 		},
 	]
+	const userImagesArray = ["http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTssjb3qfVuEAJEU4wXmQcBDruj2nNCG-FozpRmRSqqas92aG2thRbDeEAtVG94", "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Johnny_Depp_Deauville_2019.jpg/640px-Johnny_Depp_Deauville_2019.jpg", "https://fr.web.img6.acsta.net/pictures/18/06/25/11/43/5547709.jpg","https://lastfm.freetls.fastly.net/i/u/770x0/19f0026fbef6666376bf39d1978d2784.jpg", "https://imgresizer.eurosport.com/unsafe/1200x0/filters:format(jpeg):focal(1318x790:1320x788)/origin-imgresizer.eurosport.com/2021/09/11/3216921-65893688-2560-1440.jpg", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Neymar_PSG.jpg/400px-Neymar_PSG.jpg","https://i.pinimg.com/originals/a7/40/c7/a740c74f2dd81e5ca170c65468d311e7.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Kodak_Black_Press_Photo_by_David_Cabrera.jpg/399px-Kodak_Black_Press_Photo_by_David_Cabrera.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Festival_des_Vieilles_Charrues_2019_-_Booba_-_038.jpg/682px-Festival_des_Vieilles_Charrues_2019_-_Booba_-_038.jpg","https://lastfm.freetls.fastly.net/i/u/770x0/1afd8ae18966112916ec356cd090306f.jpg"];
 
 	return (
 		<View style={styles.container}>
@@ -224,11 +231,19 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 				</View>
 				<View style={styles.cardSessionBody}>
 					{name.map((name: any) => {
+						if (name.userName == window.localStorage.getItem('display_name') + ''){
+							return (
+								<SessionCard spot_user_name={name.userName} spot_user_image={userImagesArray[getRandomIntInclusive(0,9)]} spot_user_pourcentage={"Me"} />
+
+					);}
+						else{
+							
+						
 						return (
 							<div key={name} >
-								<SessionCard spot_user_name={name.userName} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={ArrayArtistComparaison(playlist, name.playlist) + "%"} />
+								<SessionCard spot_user_name={name.userName} spot_user_image={userImagesArray[getRandomIntInclusive(0,9)]} spot_user_pourcentage={ArrayArtistComparaison(playlist, name.playlist) + "%"} />
 							</div>
-						);
+						);}
 					})}
 				</View>
 			</View>
@@ -240,7 +255,9 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 				<table  >
 					<thead>
 						<tr>
-							<th >My playlist </th>
+							<th >
+								<text style={{fontFamily: 'monospace', fontSize: 30 }}>My playlist </text>
+							</th>
 						</tr>
 					</thead>
 					<tbody id='table'>
@@ -300,5 +317,15 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		backgroundColor: '#eee',
 
+
+	},
+	title: {
+		fontSize: 50,
+		fontWeight: 'bold',
+		color: '#000',
+		marginVertical: 0,
+
+
 	}
+	
 });
