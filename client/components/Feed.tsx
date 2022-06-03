@@ -4,7 +4,7 @@ import { ScreenStackHeaderCenterView } from 'react-native-screens';
 
 
 
-export default function Feed({ user_name, user_image, song_name, album_name, song_url}: { user_name: string, user_image: string, song_name: string , album_name: string, song_url: string }) {
+export default function Feed({ user_name, user_image, song_name, album_name, song_url, }: { user_name: string, user_image: string, song_name: string, album_name: string, song_url: string }) {
     return (
 
         <View style={styles.container}>
@@ -21,8 +21,8 @@ export default function Feed({ user_name, user_image, song_name, album_name, son
                         justifyContent: 'flex-start'
                     }}>
                         <Text style={styles.userName}> {user_name} </Text>
-                        <a href={song_url}  target="_blank">
-                            <Text  style={styles.songName}> {song_name} - {album_name}</Text>
+                        <a href={song_url} target="_blank">
+                            <Text style={styles.songName}> {song_name} - {album_name}</Text>
                         </a>
                     </View>
                 </View>
@@ -35,7 +35,7 @@ export default function Feed({ user_name, user_image, song_name, album_name, son
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        
+
     },
     card: {
         backgroundColor: 'white',

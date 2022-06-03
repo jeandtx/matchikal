@@ -15,9 +15,20 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 	let array: Array<any> = [];
 	const [data, setData] = useState(array);
 
+	axios({
+		method: 'get',
+		url: 'https://api.spotify.com/v1/me',
+		headers: {
+			'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+		}
+	}).then((r) => {
+		window.localStorage.setItem('spotify_page', r.data.external_urls.spotify);
+	});
 
 	let a = window.localStorage.getItem('display_name') + '';
-	let userNamesArray: any = [{ userName: a, playlist: data }];
+	let b = window.localStorage.getItem('spotify_page') + '';
+
+	let userNamesArray: any = [{ userName: a, playlist: data, spotifyPage: b }];
 	const [name, setName] = useState(userNamesArray);
 
 	const [playlist, setPlaylist] = useState([]);
@@ -100,17 +111,6 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 			socket.emit('message', { name: name });
 		});
 	}, [socket]);
-
-	function displayAllUsers(array: Array<string>) {
-		// console.log(array);
-		return array.map((name: any) => {
-			return (
-				<div key={name}>
-					<SessionCard spot_user_name={name.userName} spot_user_image={DATA_SESION[2].spot_user_image} spot_user_pourcentage={"100%"} />
-				</div>
-			);
-		})
-	}
 
 	function filterData(array: any) {
 		let newArray: Array<Array<string>> = [];
@@ -235,7 +235,7 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 							console.log('data', data);
 							return (
 								<div key={song} >
-									<SessionCard spot_user_name={song.userName} spot_user_image={userImagesArray[getRandomIntInclusive(0, 9)]} spot_user_pourcentage={ArrayArtistComparaison(song.playlist, data)} />
+									<SessionCard spot_user_name={song.userName} spot_user_image={userImagesArray[getRandomIntInclusive(0, 9)]} spot_user_pourcentage={ArrayArtistComparaison(song.playlist, data)} spot_user_page={song.spotifyPage} />
 								</div>
 							);
 						})
