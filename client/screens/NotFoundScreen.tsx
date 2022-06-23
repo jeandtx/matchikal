@@ -5,6 +5,7 @@ import { RootStackScreenProps } from '../types';
 import io from 'socket.io-client';
 import { useEffect, useState } from 'react';
 
+
 const socket = io('http://localhost:19007');
 
 export default function NotFoundScreen({ navigation }: RootStackScreenProps<'NotFound'>) {

@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScreenStackHeaderCenterView } from 'react-native-screens';
 
 // 
-export default function SessionCard({ spot_user_name, spot_user_image, spot_user_pourcentage }: { spot_user_name: string, spot_user_image: string, spot_user_pourcentage: string }) {
+export default function SessionCard({ spot_user_name, spot_user_image, spot_user_pourcentage, spot_user_page }: { spot_user_name: string, spot_user_image: string, spot_user_pourcentage: string, spot_user_page: string }) {
     return (
         <View style={styles.container}>
             <View style={styles.eachUser}>
@@ -16,7 +16,9 @@ export default function SessionCard({ spot_user_name, spot_user_image, spot_user
                     />
                 </View>
                 <View style={styles.spotUserName}>
-                    <Text style={styles.spotUserName}> {spot_user_name} </Text>
+                    <a href={spot_user_page} target="blank">
+                        <Text style={styles.spotUserName}> {spot_user_name} </Text>
+                    </a>
                     <Text style={styles.spotUserPourcentage}> {spot_user_pourcentage} </Text>
                 </View>
             </View>
@@ -58,10 +60,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontStyle: 'italic',
         justifyContent: 'center',
-        
-       
 
-        
+
+
+
     },
 
 });

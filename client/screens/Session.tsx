@@ -12,18 +12,26 @@ const socket = io('http://localhost:19007');
 
 export default function Session({ navigation }: RootStackScreenProps<'Session'>) {
 
-	let array: Array<Object> = [];
+	let array: Array<any> = [];
 	const [data, setData] = useState(array);
 
+	axios({
+		method: 'get',
+		url: 'https://api.spotify.com/v1/me',
+		headers: {
+			'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+		}
+	}).then((r) => {
+		window.localStorage.setItem('spotify_page', r.data.external_urls.spotify);
+	});
 
 	let a = window.localStorage.getItem('display_name') + '';
-	let userNamesArray: any = [{ userName: a, playlist: data }];
+	let b = window.localStorage.getItem('spotify_page') + '';
+
+	let userNamesArray: any = [{ userName: a, playlist: data, spotifyPage: b }];
 	const [name, setName] = useState(userNamesArray);
 
 	const [playlist, setPlaylist] = useState([]);
-
-
-
 
 	function getSongs(next: string) {
 		if (window.localStorage.getItem("token") != null) {
@@ -104,17 +112,6 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 		});
 	}, [socket]);
 
-	function displayAllUsers(array: Array<string>) {
-		// console.log(array);
-		return array.map((name: any) => {
-			return (
-				<div key={name}>
-					<SessionCard spot_user_name={name.userName} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={"100%"} />
-				</div>
-			);
-		})
-	}
-
 	function filterData(array: any) {
 		let newArray: Array<Array<string>> = [];
 		for (let index = 0; index < array.length; index++) {
@@ -133,13 +130,12 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 		// console.log(name);
 		return newArray;
 	}
+
 	function displayInfos(arrayObj: Array<any>) {
 		for (let index = 0; index < arrayObj.length; index++) {
 			setPlaylist(arrayObj[index].playlist);
 		}
 	}
-
-
 
 	function displayPlaylist(array: any) {
 		// console.log("this is what i want", array);
@@ -190,8 +186,16 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 				}
 			}
 		}
+		if (Math.ceil(100 * ((cpt1 / a1.length + cpt2 / a2.length) / 2) * 100) / 100 == 100) {
+			return "Me"
+		}
+		return Math.ceil(100 * ((cpt1 / a1.length + cpt2 / a2.length) / 2) * 100) / 100 + "%";
+	}
 
-		return Math.ceil(100 * ((cpt1 / a1.length + cpt2 / a2.length) / 2) * 100) / 100;
+	function getRandomIntInclusive(min: any, max: any) {
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 
 	const DATA_SESION = [
@@ -215,6 +219,7 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 
 		},
 	]
+	const userImagesArray = ["http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTssjb3qfVuEAJEU4wXmQcBDruj2nNCG-FozpRmRSqqas92aG2thRbDeEAtVG94", "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Johnny_Depp_Deauville_2019.jpg/640px-Johnny_Depp_Deauville_2019.jpg", "https://fr.web.img6.acsta.net/pictures/18/06/25/11/43/5547709.jpg", "https://lastfm.freetls.fastly.net/i/u/770x0/19f0026fbef6666376bf39d1978d2784.jpg", "https://imgresizer.eurosport.com/unsafe/1200x0/filters:format(jpeg):focal(1318x790:1320x788)/origin-imgresizer.eurosport.com/2021/09/11/3216921-65893688-2560-1440.jpg", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Neymar_PSG.jpg/400px-Neymar_PSG.jpg", "https://i.pinimg.com/originals/a7/40/c7/a740c74f2dd81e5ca170c65468d311e7.jpg", "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Kodak_Black_Press_Photo_by_David_Cabrera.jpg/399px-Kodak_Black_Press_Photo_by_David_Cabrera.jpg", "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Festival_des_Vieilles_Charrues_2019_-_Booba_-_038.jpg/682px-Festival_des_Vieilles_Charrues_2019_-_Booba_-_038.jpg", "https://lastfm.freetls.fastly.net/i/u/770x0/1afd8ae18966112916ec356cd090306f.jpg"];
 
 	return (
 		<View style={styles.container}>
@@ -223,13 +228,18 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 					<Text style={styles.sessionID}>Session: </Text>
 				</View>
 				<View style={styles.cardSessionBody}>
-					{name.map((name: any) => {
-						return (
-							<div key={name} >
-								<SessionCard spot_user_name={name.userName} spot_user_image={DATA_SESION[0].spot_user_image} spot_user_pourcentage={ArrayArtistComparaison(playlist, name.playlist) + "%"} />
-							</div>
-						);
-					})}
+
+					{
+						name.map((song: any) => {
+							console.log('song.playlist', song.playlist)
+							console.log('data', data);
+							return (
+								<div key={song} >
+									<SessionCard spot_user_name={song.userName} spot_user_image={userImagesArray[getRandomIntInclusive(0, 9)]} spot_user_pourcentage={ArrayArtistComparaison(song.playlist, data)} spot_user_page={song.spotifyPage} />
+								</div>
+							);
+						})
+					}
 				</View>
 			</View>
 			<Bouton text='Leave Session' test={() => {
@@ -240,7 +250,9 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 				<table  >
 					<thead>
 						<tr>
-							<th >My playlist </th>
+							<th >
+								<Text style={{ fontFamily: 'monospace', fontSize: 30, color: 'black' }}>My playlist </Text>
+							</th>
 						</tr>
 					</thead>
 					<tbody id='table'>
@@ -248,7 +260,6 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 							displayPlaylist(data)
 						}
 						{
-
 							playlist.map((song: any) => {
 								return (
 									<tr key={song} >
@@ -267,6 +278,7 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 	);
 
 }
+
 const styles = StyleSheet.create({
 	container: {
 		backgroundColor: '#0a0345',
@@ -300,5 +312,15 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		backgroundColor: '#eee',
 
+
+	},
+	title: {
+		fontSize: 50,
+		fontWeight: 'bold',
+		color: '#000',
+		marginVertical: 0,
+
+
 	}
+
 });
