@@ -23,10 +23,16 @@ export default function Session({ navigation }: RootStackScreenProps<'Session'>)
 		}
 	}).then((r) => {
 		window.localStorage.setItem('spotify_page', r.data.external_urls.spotify);
+		
+		//get all spotify infortmation
+		
 	});
 
+	
 	let a = window.localStorage.getItem('display_name') + '';
 	let b = window.localStorage.getItem('spotify_page') + '';
+	let c = window.localStorage.getItem('spotify_top')  ;
+	console.log("caca", c);
 
 	let userNamesArray: any = [{ userName: a, playlist: data, spotifyPage: b }];
 	const [name, setName] = useState(userNamesArray);
